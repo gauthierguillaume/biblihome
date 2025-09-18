@@ -54,7 +54,7 @@ CREATE TABLE users (
     user_prenom             VARCHAR(100) NOT NULL,
     user_mail               VARCHAR(255) NOT NULL,
     user_mdp                BINARY(64) NOT NULL,
-    user_num_employe        INT NULL, --number for bo role assignment, can also be used to signify an employee left the organization & lock login
+    user_num_employe        INT NULL, /*number for bo role assignment, can also be used to signify an employee left the organization & lock login*/
     user_role               VARCHAR(100) NULL,
     user_date_naissance     DATETIME NULL,
     user_date_creation      DATETIME DEFAULT CURRENT_TIMESTAMP,
