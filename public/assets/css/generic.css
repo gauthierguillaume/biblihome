@@ -1,0 +1,73 @@
+/* -------------------------------- flex --------------------------- */
+
+.flexRow {
+	display: flex;
+	flex-direction: row;
+}
+
+.flexCol {
+	display: flex;
+	flex-direction: column;
+}
+
+.wrap {
+	flex-wrap: wrap;
+}
+
+.taCenter {
+	text-align: center;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+/* -------------------------------- justify-content --------------------------- */
+
+.jcCenter {
+	justify-content: center;
+}
+
+.jcSpaceBetween {
+	justify-content: space-between;
+}
+
+.jcSpaceAround {
+	justify-content: space-around;
+}
+
+.jcFlexStart {
+	justify-content: flex-start;
+}
+
+.jcFlexEnd {
+	justify-content: flex-end;
+}
+
+/* -------------------------------- align-items --------------------------- */
+
+.aiCenter {
+	align-items: center;
+}
+
+.aiFlexStart {
+	align-items: flex-start;
+}
+
+.aiFlexEnd {
+	align-items: flex-end;
+}
+
+/* -------------------------------- align-content --------------------------- */
+
+.acCenter {
+	align-content: center;
+}
+
+.acFlexStart {
+	align-content: flex-start;
+}
+
+.acFlexEnd {
+	align-content: flex-end;
+}
