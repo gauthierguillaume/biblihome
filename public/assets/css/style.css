@@ -1,12 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
 
 :root {
-	--dm_text: #E6E1DB;
-	--dm_background: #3E3A36;
-	--dm_container: #1C1A17;
-	--yellow: #CCCC00;
-	--magenta: #CC00CC;
-	--cyan: #00CCCC;
+	/* Font colors */
+	--dm_text: #e6e1db;
+	--dm_background: #3e3a36;
+	--dm_container: #1c1a17;
+	--dm_transparency: rgba(28, 26, 23, 0.6);
+	--yellow: #cccc00;
+	--magenta: #cc00cc;
+	--cyan: #00cccc;
+}
+
+:root {
+	/* Font sizes */
+	--font-title: 48px;
+	--font-subtitle: 32px;
+	--font-title: 24px;
+	--font-text: 16px;
+	--font-text-mobile: 14px;
 }
 
 * {
@@ -16,4 +27,248 @@
 	list-style-type: none;
 	box-sizing: border-box;
 	font-family: "Space Grotesk", sans-serif;
+}
+
+a {
+	color: inherit;
+}
+
+h1 {
+	font-size: var(--font-title);
+	font-weight: bold;
+}
+
+h2 {
+	font-size: var(--font-subtitle);
+	font-weight: bold;
+}
+
+body {
+	background-color: var(--dm_background);
+	color: var(--dm_text);
+	font-size: var(--font-text);
+	line-height: 1.4;
+}
+
+section {
+	padding: 2rem;
+}
+
+.container {
+	max-width: 1200px;
+	margin: auto;
+}
+
+/* ------------- HEADER ------------- */
+
+nav {
+	padding: 1rem 4rem;
+}
+
+nav .left-side {
+	gap: 2rem;
+}
+
+nav img {
+	width: 8rem;
+}
+
+/* nav .searchbar input {
+	width: 20rem;
+	border-radius: 6px;
+	padding: 0.8rem 2rem;
+	background-color: var(--dm_container);
+	outline: none;
+	box-shadow: none;
+	border: none;
+}
+
+nav .searchbar input::placeholder {
+	color: var(--dm_text);
+} */
+
+nav .right-side {
+	gap: 2rem;
+}
+
+nav a {
+	font-weight: 600;
+	transition: 0.5s;
+}
+
+#accueil:hover {
+	color: var(--yellow);
+}
+#catalogue:hover {
+	color: var(--magenta);
+}
+
+#identify-button {
+	background-color: var(--dm_container);
+	padding: 0.8rem 2rem;
+	border-radius: 100px;
+	transition: 0.5s;
+	width: fit-content;
+}
+
+#identify-button img {
+	width: 1.5rem;
+	margin-right: 0.5rem;
+}
+
+#identify-button:hover {
+	background-color: var(--dm_container);
+	color: var(--cyan);
+}
+
+/* ------------- HERO ------------- */
+
+.hero {
+	padding: 10rem;
+	background-image: url("../img/CMY.png");
+	background-position: center;
+}
+
+.hero .banner-text {
+	max-width: fit-content;
+	background-color: var(--dm_transparency);
+	backdrop-filter: blur(10px);
+	background-size: cover;
+	padding: 2rem;
+	border-radius: 30px;
+	gap: 1.5rem;
+}
+
+/* ------------- CATALOG ------------- */
+
+.catalog {
+	gap: 2rem;
+}
+
+.catalog .books {
+	gap: 2rem;
+}
+
+.catalog .books img {
+	border-radius: 12px;
+}
+
+.catalog .books .title {
+	font-size: var(--font-title);
+	font-weight: bold;
+}
+
+/* ----------- SUBSCRIPTIONS ----------- */
+
+.subscriptions {
+	gap: 2rem;
+}
+
+.subscriptions-row {
+	gap: 2rem;
+}
+
+.card {
+	padding: 5rem 2rem;
+	background-image: url("../img/CMY.png");
+	background-position: center;
+	border-radius: 12px;
+}
+
+.card-text {
+	max-width: fit-content;
+	background-color: var(--dm_transparency);
+	backdrop-filter: blur(10px);
+	background-size: cover;
+	padding: 2rem;
+	border-radius: 30px;
+	gap: 1.5rem;
+	max-width: 18rem;
+	height: 25rem;
+	gap: 1rem;
+}
+
+.card-text h3 {
+	font-size: var(--font-subtitle);
+	font-weight: bold;
+}
+
+.card .decouverte h3 {
+	color: var(--yellow);
+}
+
+.card .passion h3 {
+	color: var(--magenta);
+}
+
+.card .famille h3 {
+	color: var(--cyan);
+}
+
+.card-text h4 {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.card-text img {
+	width: 1rem;
+}
+
+/* ------------- FAQ ------------- */
+
+/* ------------- FOOTER ------------- */
+footer {
+	padding: 1rem 4rem;
+}
+
+footer .left-side {
+	gap: 2rem;
+}
+
+footer img {
+	width: 8rem;
+}
+
+footer .right-side {
+	gap: 8rem;
+}
+
+footer .links {
+	gap: 2rem;
+}
+
+footer a {
+	font-weight: 600;
+	transition: 0.5s;
+}
+
+#cgu:hover {
+	color: var(--yellow);
+}
+
+#contact:hover {
+	color: var(--magenta);
+}
+
+#faq:hover {
+	color: var(--cyan);
+}
+
+footer .socials {
+	gap: 1.5rem;
+}
+
+#twitter-icon {
+	font-size: 2rem;
+	color: var(--yellow);
+}
+
+#instagram-icon {
+	font-size: 2rem;
+	color: var(--magenta);
+}
+
+#facebook-icon {
+	font-size: 2rem;
+	color: var(--cyan);
 }

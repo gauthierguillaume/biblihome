@@ -1,11 +1,11 @@
-/* -------------------------------- flex --------------------------- */
+/* ------------- flex ------------- */
 
-.flexRow {
+.flex-row {
 	display: flex;
 	flex-direction: row;
 }
 
-.flexCol {
+.flex-col {
 	display: flex;
 	flex-direction: column;
 }
@@ -14,7 +14,7 @@
 	flex-wrap: wrap;
 }
 
-.taCenter {
+.ta-center {
 	text-align: center;
 }
 
@@ -22,52 +22,52 @@
 	text-transform: uppercase;
 }
 
-/* -------------------------------- justify-content --------------------------- */
+/* ------------- justify-content ------------- */
 
-.jcCenter {
+.jc-center {
 	justify-content: center;
 }
 
-.jcSpaceBetween {
+.jc-space-between {
 	justify-content: space-between;
 }
 
-.jcSpaceAround {
+.jc-space-around {
 	justify-content: space-around;
 }
 
-.jcFlexStart {
+.jc-flex-start {
 	justify-content: flex-start;
 }
 
-.jcFlexEnd {
+.jc-flex-end {
 	justify-content: flex-end;
 }
 
-/* -------------------------------- align-items --------------------------- */
+/* ------------- align-items ------------- */
 
-.aiCenter {
+.ai-center {
 	align-items: center;
 }
 
-.aiFlexStart {
+.ai-flex-start {
 	align-items: flex-start;
 }
 
-.aiFlexEnd {
+.ai-flex-end {
 	align-items: flex-end;
 }
 
-/* -------------------------------- align-content --------------------------- */
+/* ------------- align-content ------------- */
 
-.acCenter {
+.ac-center {
 	align-content: center;
 }
 
-.acFlexStart {
+.ac-flex-start {
 	align-content: flex-start;
 }
 
-.acFlexEnd {
+.ac-flex-end {
 	align-content: flex-end;
 }
