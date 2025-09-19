@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BibliHome</title>
     <meta name="description" content="BibliHome - Une bibliothèque accessible à tous">
-    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/css/style.css">
-    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/css/searchbar.css">
-    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/css/generic.css">
+    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/public/assets/css/style.css">
+    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/public/assets/css/searchbar.css">
+    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/public/assets/css/generic.css">
     <!-- Font Awesome -->
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" />
