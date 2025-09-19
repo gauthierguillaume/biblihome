@@ -3,14 +3,14 @@ include($_SERVER['DOCUMENT_ROOT'].'/host.php');
 
 //if(isset($_SESSION['auth']) && $_SESSION['auth']['role_level'] > 99 ){
 
-    include($_SERVER['DOCUMENT_ROOT'].'/private/bo/_blocks/sidebar.php');
+    include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/sidebar.php');
 
-    include($_SERVER['DOCUMENT_ROOT'].'/private/bo/_blocks/header.php');
+    include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/header.php');
 
     $domaine = "Dashboard";
     $sousDomaine = "Admin / Liste des utilisateurs";
 
-    include($_SERVER['DOCUMENT_ROOT'].'/private/bo/_blocks/ariane.php');
+    include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/ariane.php');
 
     if(isset($_GET['action']) && $_GET['action'] == "addUser"){
 
@@ -321,7 +321,7 @@ include($_SERVER['DOCUMENT_ROOT'].'/host.php');
         <?php
     }
 
-    include($_SERVER['DOCUMENT_ROOT'].'/private/bo/_blocks/footer.php');
+    include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/footer.php');
 
 //}else{
 //     echo "<script language='javascript'>

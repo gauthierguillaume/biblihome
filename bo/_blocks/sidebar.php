@@ -17,8 +17,9 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <title>Modern Admin Dashboard</title>
-    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT']?>/private/assets/styles/style.css">
-    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT']?>/private/assets/styles/form.css">
+    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_assets/styles/style.css">
+    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_assets/styles/generic.css">
+    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_assets/styles/form.css">
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -48,7 +49,7 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
         
         <div class="side-content">
             <div class="profile">
-                <div class="profile-img bg-img" style="background-image: url(<?php $_SERVER['DOCUMENT_ROOT']?>/private/assets/img/3.jpeg)"></div>
+                <div class="profile-img bg-img" style="background-image: url(<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_assets/img/3.jpeg)"></div>
                 <h4><?php echo ucfirst($user->user_prenom);?> <?php echo ucfirst($user->user_nom);?></h4>
                 <small><?php echo $user->role_name;?></small>
             </div>
@@ -57,38 +58,38 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
                 <ul>
 
                     <li>
-                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/private/bo/index.php?zone=dashboard" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "dashboard"){ echo "active";}?>">
+                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/index.php?zone=dashboard" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "dashboard"){ echo "active";}?>">
                             <span class="las la-home"></span>
                             <small>Dashboard</small>
                         </a>
                     </li>
                     <li>
-                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/private/bo/_views/livraisons.php?zone=livraisons" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "livraisons"){ echo "active";}?>">
+                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/livraisons.php?zone=livraisons" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "livraisons"){ echo "active";}?>">
                             <span class="las la-truck"></span>
                             <small>Livraisons</small>
                         </a>
                     </li>
                     <li>
-                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/private/bo/_views/livres.php?zone=livres" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "livres"){ echo "active";}?>">
+                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/livres.php?zone=livres" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "livres"){ echo "active";}?>">
                             <span class="las la-book"></span>
                             <small>Livres</small>
                         </a>
                     </li>
                     <li>
-                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/private/bo/_views/auteurs.php?zone=auteurs" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "auteurs"){ echo "active";}?>">
+                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/auteurs.php?zone=auteurs" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "auteurs"){ echo "active";}?>">
                             <span class="las la-user-alt"></span>
                             <small>Auteurs</small>
                         </a>
                     </li>
                     <li>
-                        <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/private/bo/_views/donnees.php?zone=donnees" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "donnees"){ echo "active";}?>">
+                        <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/donnees.php?zone=donnees" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "donnees"){ echo "active";}?>">
                             <span class="las la-file-alt"></span>
                             <small>Donnees</small>
                         </a>
                     </li>
 
                     <li>
-                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/private/bo/_views/abonnements.php?zone=abonnements" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "abonnements"){ echo "active";}?>">
+                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/abonnements.php?zone=abonnements" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "abonnements"){ echo "active";}?>">
                             <span class="las la-wallet"></span>
                             <small>Abonnements</small>
                         </a>
@@ -97,7 +98,7 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
                     if(isset($_SESSION['auth']) && $_SESSION['auth']['role_level'] > 99){
                         ?>
                             <li>
-                            <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/private/bo/_views/admin.php?zone=admin" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "admin"){ echo "active";}?>">
+                            <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/admin.php?zone=admin" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "admin"){ echo "active";}?>">
                                     <span class="las la-user-secret"></span>
                                     <small>Admin</small>
                                 </a>
@@ -106,7 +107,7 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
                     }
                     ?>
                     <li>
-                        <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/private/bo/_views/divers.php?zone=divers" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "divers"){ echo "active";}?>">
+                        <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/divers.php?zone=divers" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "divers"){ echo "active";}?>">
                             <span class="las la-dove"></span>
                             <small>Divers</small>
                         </a>

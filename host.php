@@ -11,5 +11,5 @@ try{
 
 session_start();
 
-include($_SERVER['DOCUMENT_ROOT'].'/private/bo/_functions/fonctions.php');
+include($_SERVER['DOCUMENT_ROOT'].'/bo/_functions/fonctions.php');
 ?>
