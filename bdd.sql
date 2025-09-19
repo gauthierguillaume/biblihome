@@ -25,8 +25,9 @@ DROP TABLE IF EXISTS
     livres_genres,
     livres_auteurs,
     livres_series,
-    favoris, 
-    faq;
+    favoris,
+    faq,
+    roles;
 
 /*on crée les nouvelles tables*/
 CREATE TABLE civilites (
@@ -53,9 +54,9 @@ CREATE TABLE users (
     user_nom                VARCHAR(100) NOT NULL,
     user_prenom             VARCHAR(100) NOT NULL,
     user_mail               VARCHAR(255) NOT NULL,
-    user_mdp                BINARY(64) NOT NULL,
+    user_mdp                VARCHAR(255) NOT NULL,
     user_num_employe        INT NULL, /*number for bo role assignment, can also be used to signify an employee left the organization & lock login*/
-    user_role               VARCHAR(100) NULL,
+    id_role                 INT NOT NULL,
     user_date_naissance     DATETIME NULL,
     user_date_creation      DATETIME DEFAULT CURRENT_TIMESTAMP,
     user_date_abonnement    DATETIME NULL,
@@ -188,10 +189,18 @@ CREATE TABLE faq (
     faq_reponse             TEXT NOT NULL
 );
 
+CREATE TABLE roles (
+    PRIMARY KEY (id_role),
+    id_role                  INT AUTO_INCREMENT,
+    role_name                VARCHAR(20) NOT NULL,
+    role_level               INT NOT NULL
+);
+
 /*on gère les jonctions de tables par clés étrangères*/
 
 ALTER TABLE users ADD FOREIGN KEY (id_civilite) REFERENCES civilites (id_civilite);
 ALTER TABLE users ADD FOREIGN KEY (id_abonnement) REFERENCES abonnements (id_abonnement);
+ALTER TABLE users ADD FOREIGN KEY (id_role) REFERENCES roles (id_role);
 
 ALTER TABLE carnet_adresses ADD FOREIGN KEY (id_user) REFERENCES users (id_user);
 

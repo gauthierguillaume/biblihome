@@ -1,14 +1,14 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT'] . '/host.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/public/host.php');
 // ----------------------- HEADER -----------------------
-include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/public/blocks/nav.php');
 // ----------------------- MAIN -----------------------
-include($_SERVER['DOCUMENT_ROOT'] . '/blocks/hero.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/blocks/catalog.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/blocks/subscriptions.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/blocks/faq.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/public/blocks/hero.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/public/blocks/catalog.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/public/blocks/subscriptions.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/public/blocks/faq.php');
 ?>
 
 <?php
-include($_SERVER['DOCUMENT_ROOT'] . '/blocks/footer.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/public/blocks/footer.php');
 ?>
