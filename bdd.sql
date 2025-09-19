@@ -1,225 +1,591 @@
-/*suppression de la base de données existante*/
+-- phpMyAdmin SQL Dump
+-- version 5.2.2
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:3306
+-- Generation Time: Sep 19, 2025 at 12:14 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.1.10
 
-DROP DATABASE IF EXISTS biblihome;
-
-/*création de la base de données*/
-CREATE DATABASE IF NOT EXISTS biblihome;
-ALTER DATABASE biblihome charset=utf8mb4;
-
-/*on indique au système quelle base de données utiliser*/
-USE biblihome; 
-
-/* on supprime les tables qu'on va créer si elles existent */
-DROP TABLE IF EXISTS
-    civilites,
-    abonnements,
-    users,
-    carnet_adresses,
-    emprunt,
-    exemplaires,
-    livres,
-    genres,
-    auteurs,
-    series, 
-    langues,
-    livres_genres,
-    livres_auteurs,
-    livres_series,
-    favoris,
-    faq,
-    roles;
-
-/*on crée les nouvelles tables*/
-CREATE TABLE civilites (
-    PRIMARY KEY (id_civilite),
-    id_civilite              INT AUTO_INCREMENT,
-    civilite_nom             VARCHAR(20) NOT NULL,
-    civilite_label           VARCHAR(20) NOT NULL
-);
-
-CREATE TABLE abonnements (
-    PRIMARY KEY (id_abonnement),
-    id_abonnement       INT AUTO_INCREMENT,
-    abonnement_nom      VARCHAR(20) NOT NULL,
-    abonnement_prix     DECIMAL(10,2) NOT NULL,
-    abonnement_duree    VARCHAR(20) NOT NULL,
-    abonnement_blurb    VARCHAR(255) NOT NULL,
-    abonnement_desc     TEXT NOT NULL,
-    abonnement_perks    TEXT NOT NULL
-);
-
-CREATE TABLE users (
-    PRIMARY KEY (id_user),
-    id_user                 INT AUTO_INCREMENT,
-    user_nom                VARCHAR(100) NOT NULL,
-    user_prenom             VARCHAR(100) NOT NULL,
-    user_mail               VARCHAR(255) NOT NULL,
-    user_mdp                VARCHAR(255) NOT NULL,
-    user_num_employe        INT NULL, /*number for bo role assignment, can also be used to signify an employee left the organization & lock login*/
-    id_role                 INT NOT NULL,
-    user_date_naissance     DATETIME NULL,
-    user_date_creation      DATETIME DEFAULT CURRENT_TIMESTAMP,
-    user_date_abonnement    DATETIME NULL,
-    user_img                VARCHAR(255) NULL,
-    id_civilite             INT NOT NULL,
-    id_abonnement           INT NULL
-);
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
 
-CREATE TABLE carnet_adresses (
-    PRIMARY KEY (id_carnet_a),
-    id_carnet_a                INT AUTO_INCREMENT,
-    carnet_a_nom               VARCHAR(100) NOT NULL,
-    carnet_a_prenom            VARCHAR(100) NOT NULL,
-    carnet_a_ligne_une         VARCHAR(255) NOT NULL,
-    carnet_a_ligne_deux        VARCHAR(255) NULL,
-    carnet_a_ville             VARCHAR(255) NOT NULL,
-    carnet_a_cp                INT NOT NULL,
-    carnet_a_bool_relais       BOOLEAN NULL DEFAULT 0,
-    carnet_a_tel               VARCHAR(20) NOT NULL,
-    id_user                    INT NOT NULL
-);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Database: `biblihome`
+--
 
-CREATE TABLE emprunt (
-    PRIMARY KEY (id_emprunt),
-    id_emprunt                          INT AUTO_INCREMENT,
-    emprunt_delais_retour               DATETIME NULL,
-    emprunt_date_emprunt                DATETIME DEFAULT CURRENT_TIMESTAMP,
-    emprunt_date_envoi                  DATETIME NULL,
-    emprunt_date_reception              DATETIME NULL,
-    emprunt_date_retour                 DATETIME NULL,
-    emprunt_num_envoi                   VARCHAR(50) UNIQUE NULL,
-    emprunt_num_retour                  VARCHAR(50) UNIQUE NULL,
-    emprunt_retour_particulier          BOOLEAN NULL DEFAULT 0,
-    id_exemplaire                       INT NOT NULL,
-    id_carnet_a                         INT NOT NULL,
-    id_user                             INT NOT NULL
-);
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `abonnements`
+--
 
-CREATE TABLE exemplaires (
-    PRIMARY KEY (id_exemplaire),
-    id_exemplaire              INT AUTO_INCREMENT,
-    id_livre                   INT NOT NULL,
-    exemplaire_actif           INT DEFAULT 0
-);
+CREATE TABLE `abonnements` (
+  `id_abonnement` int NOT NULL,
+  `abonnement_nom` varchar(20) NOT NULL,
+  `abonnement_prix` decimal(10,2) NOT NULL,
+  `abonnement_duree` varchar(20) NOT NULL,
+  `abonnement_blurb` varchar(255) NOT NULL,
+  `abonnement_desc` text NOT NULL,
+  `abonnement_perks` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- --------------------------------------------------------
 
-CREATE TABLE livres (
-    PRIMARY KEY (id_livre),
-    id_livre                    INT AUTO_INCREMENT,
-    livre_titre                 VARCHAR(255) NOT NULL,
-    livre_isbn                  VARCHAR(20) UNIQUE NOT NULL,
-    livre_couverture            VARCHAR(255) NULL,
-    livre_synopsis              TEXT NULL,
-    livre_editeur               VARCHAR(100) NULL,
-    livre_date_publication      DATE NULL,
-    livre_date_creation         DATETIME DEFAULT CURRENT_TIMESTAMP,
-    id_langue                   INT NOT NULL
-);
+--
+-- Table structure for table `auteurs`
+--
 
+CREATE TABLE `auteurs` (
+  `id_auteur` int NOT NULL,
+  `auteur_nom` varchar(100) NOT NULL,
+  `auteur_prenom` varchar(100) DEFAULT NULL,
+  `auteur_image` varchar(255) DEFAULT NULL,
+  `auteur_nationalite` varchar(100) DEFAULT NULL,
+  `auteur_biographie` text,
+  `auteur_date_naissance` date DEFAULT NULL,
+  `auteur_date_deces` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE genres (
-    PRIMARY KEY (id_genre),
-    id_genre                    INT AUTO_INCREMENT,
-    genre_tag                   VARCHAR(100) NOT NULL
-);
+-- --------------------------------------------------------
 
-CREATE TABLE auteurs (
-    PRIMARY KEY (id_auteur),
-    id_auteur                   INT AUTO_INCREMENT,
-    auteur_nom                  VARCHAR(100) NOT NULL,
-    auteur_prenom               VARCHAR(100) NULL,
-    auteur_image                VARCHAR(255) NULL,
-    auteur_nationalite          VARCHAR(100) NULL,
-    auteur_biographie           TEXT NULL,
-    auteur_date_naissance       DATE NULL,
-    auteur_date_deces           DATE NULL
-); 
+--
+-- Table structure for table `carnet_adresses`
+--
 
+CREATE TABLE `carnet_adresses` (
+  `id_carnet_a` int NOT NULL,
+  `carnet_a_nom` varchar(100) NOT NULL,
+  `carnet_a_prenom` varchar(100) NOT NULL,
+  `carnet_a_ligne_une` varchar(255) NOT NULL,
+  `carnet_a_ligne_deux` varchar(255) DEFAULT NULL,
+  `carnet_a_ville` varchar(255) NOT NULL,
+  `carnet_a_cp` int NOT NULL,
+  `carnet_a_bool_relais` tinyint(1) DEFAULT '0',
+  `carnet_a_tel` varchar(20) NOT NULL,
+  `id_user` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE series (
-    PRIMARY KEY (id_serie),
-    id_serie                    INT AUTO_INCREMENT,
-    serie_nom                   VARCHAR(255) NOT NULL
-);
+-- --------------------------------------------------------
 
-CREATE TABLE langues (
-    PRIMARY KEY (id_langue),
-    id_langue                   INT AUTO_INCREMENT,
-    langue_nom                  VARCHAR(100) NOT NULL
-);
+--
+-- Table structure for table `civilites`
+--
 
+CREATE TABLE `civilites` (
+  `id_civilite` int NOT NULL,
+  `civilite_nom` varchar(20) NOT NULL,
+  `civilite_label` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE livres_genres (
-    PRIMARY KEY (id_livre_genre),
-    id_livre_genre                  INT AUTO_INCREMENT,
-    id_livre                        INT NOT NULL,
-    id_genre                        INT NOT NULL
-);
+--
+-- Dumping data for table `civilites`
+--
 
-CREATE TABLE livres_auteurs (
-    PRIMARY KEY (id_livre_auteur),
-    id_livre_auteur                 INT AUTO_INCREMENT,
-    id_livre                        INT NOT NULL,
-    id_auteur                       INT NOT NULL
-);
+INSERT INTO `civilites` (`id_civilite`, `civilite_nom`, `civilite_label`) VALUES
+(1, 'Homme', 'Monsieur'),
+(2, 'Femme', 'Madame'),
+(3, 'Autre', 'Mix');
 
+-- --------------------------------------------------------
 
-CREATE TABLE livres_series (
-    PRIMARY KEY (id_livre_serie),
-    id_livre_serie                  INT AUTO_INCREMENT,
-    id_livre                        INT NOT NULL,
-    id_serie                        INT NOT NULL
-);
+--
+-- Table structure for table `emprunt`
+--
 
+CREATE TABLE `emprunt` (
+  `id_emprunt` int NOT NULL,
+  `emprunt_delais_retour` datetime DEFAULT NULL,
+  `emprunt_date_emprunt` datetime DEFAULT CURRENT_TIMESTAMP,
+  `emprunt_date_envoi` datetime DEFAULT NULL,
+  `emprunt_date_reception` datetime DEFAULT NULL,
+  `emprunt_date_retour` datetime DEFAULT NULL,
+  `emprunt_num_envoi` varchar(50) DEFAULT NULL,
+  `emprunt_num_retour` varchar(50) DEFAULT NULL,
+  `emprunt_retour_particulier` tinyint(1) DEFAULT '0',
+  `id_exemplaire` int NOT NULL,
+  `id_carnet_a` int NOT NULL,
+  `id_user` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE favoris (
-    PRIMARY KEY (id_favoris),
-    id_favoris                      INT AUTO_INCREMENT,
-    id_livre                        INT NOT NULL,
-    id_user                         INT NOT NULL
-);
+-- --------------------------------------------------------
 
-CREATE TABLE faq (
-    PRIMARY KEY (id_faq),
-    id_faq                  INT AUTO_INCREMENT,
-    faq_question            TEXT NOT NULL,
-    faq_reponse             TEXT NOT NULL
-);
+--
+-- Table structure for table `exemplaires`
+--
 
-CREATE TABLE roles (
-    PRIMARY KEY (id_role),
-    id_role                  INT AUTO_INCREMENT,
-    role_name                VARCHAR(20) NOT NULL,
-    role_level               INT NOT NULL
-);
+CREATE TABLE `exemplaires` (
+  `id_exemplaire` int NOT NULL,
+  `id_livre` int NOT NULL,
+  `exemplaire_actif` int DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-/*on gère les jonctions de tables par clés étrangères*/
+-- --------------------------------------------------------
 
-ALTER TABLE users ADD FOREIGN KEY (id_civilite) REFERENCES civilites (id_civilite);
-ALTER TABLE users ADD FOREIGN KEY (id_abonnement) REFERENCES abonnements (id_abonnement);
-ALTER TABLE users ADD FOREIGN KEY (id_role) REFERENCES roles (id_role);
+--
+-- Table structure for table `faq`
+--
 
-ALTER TABLE carnet_adresses ADD FOREIGN KEY (id_user) REFERENCES users (id_user);
+CREATE TABLE `faq` (
+  `id_faq` int NOT NULL,
+  `faq_question` text NOT NULL,
+  `faq_reponse` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-ALTER TABLE emprunt ADD FOREIGN KEY (id_exemplaire) REFERENCES exemplaires (id_exemplaire);
-ALTER TABLE emprunt ADD FOREIGN KEY (id_carnet_a) REFERENCES carnet_adresses (id_carnet_a);
-ALTER TABLE emprunt ADD FOREIGN KEY (id_user) REFERENCES users (id_user);
+-- --------------------------------------------------------
 
-ALTER TABLE exemplaires ADD FOREIGN KEY (id_livre) REFERENCES livres (id_livre);
+--
+-- Table structure for table `favoris`
+--
 
-ALTER TABLE livres ADD FOREIGN KEY (id_langue) REFERENCES langues (id_langue);
+CREATE TABLE `favoris` (
+  `id_favoris` int NOT NULL,
+  `id_livre` int NOT NULL,
+  `id_user` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-ALTER TABLE livres_genres ADD FOREIGN KEY (id_livre) REFERENCES livres (id_livre);
-ALTER TABLE livres_genres ADD FOREIGN KEY (id_genre) REFERENCES genres (id_genre);
+-- --------------------------------------------------------
 
-ALTER TABLE livres_auteurs ADD FOREIGN KEY (id_livre) REFERENCES livres (id_livre);
-ALTER TABLE livres_auteurs ADD FOREIGN KEY (id_auteur) REFERENCES auteurs (id_auteur);
+--
+-- Table structure for table `genres`
+--
 
-ALTER TABLE livres_series ADD FOREIGN KEY (id_livre) REFERENCES livres (id_livre);
-ALTER TABLE livres_series ADD FOREIGN KEY (id_serie) REFERENCES series (id_serie);
+CREATE TABLE `genres` (
+  `id_genre` int NOT NULL,
+  `genre_tag` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-ALTER TABLE favoris ADD FOREIGN KEY (id_livre) REFERENCES livres (id_livre);
-ALTER TABLE favoris ADD FOREIGN KEY (id_user) REFERENCES users (id_user);
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `langues`
+--
+
+CREATE TABLE `langues` (
+  `id_langue` int NOT NULL,
+  `langue_nom` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `livres`
+--
+
+CREATE TABLE `livres` (
+  `id_livre` int NOT NULL,
+  `livre_titre` varchar(255) NOT NULL,
+  `livre_isbn` varchar(20) NOT NULL,
+  `livre_couverture` varchar(255) DEFAULT NULL,
+  `livre_synopsis` text,
+  `livre_editeur` varchar(100) DEFAULT NULL,
+  `livre_date_publication` date DEFAULT NULL,
+  `livre_date_creation` datetime DEFAULT CURRENT_TIMESTAMP,
+  `id_langue` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `livres_auteurs`
+--
+
+CREATE TABLE `livres_auteurs` (
+  `id_livre_auteur` int NOT NULL,
+  `id_livre` int NOT NULL,
+  `id_auteur` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `livres_genres`
+--
+
+CREATE TABLE `livres_genres` (
+  `id_livre_genre` int NOT NULL,
+  `id_livre` int NOT NULL,
+  `id_genre` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `livres_series`
+--
+
+CREATE TABLE `livres_series` (
+  `id_livre_serie` int NOT NULL,
+  `id_livre` int NOT NULL,
+  `id_serie` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roles`
+--
+
+CREATE TABLE `roles` (
+  `id_role` int NOT NULL,
+  `role_name` varchar(20) NOT NULL,
+  `role_level` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`id_role`, `role_name`, `role_level`) VALUES
+(1, 'Modérateur', 50),
+(2, 'Administrateur', 100);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `series`
+--
+
+CREATE TABLE `series` (
+  `id_serie` int NOT NULL,
+  `serie_nom` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id_user` int NOT NULL,
+  `user_nom` varchar(100) NOT NULL,
+  `user_prenom` varchar(100) NOT NULL,
+  `user_mail` varchar(255) NOT NULL,
+  `user_mdp` varchar(255) NOT NULL,
+  `user_num_employe` int DEFAULT NULL,
+  `id_role` int NOT NULL,
+  `user_date_naissance` datetime DEFAULT NULL,
+  `user_date_creation` datetime DEFAULT CURRENT_TIMESTAMP,
+  `user_date_abonnement` datetime DEFAULT NULL,
+  `user_img` varchar(255) DEFAULT NULL,
+  `id_civilite` int NOT NULL,
+  `id_abonnement` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id_user`, `user_nom`, `user_prenom`, `user_mail`, `user_mdp`, `user_num_employe`, `id_role`, `user_date_naissance`, `user_date_creation`, `user_date_abonnement`, `user_img`, `id_civilite`, `id_abonnement`) VALUES
+(1, 'Admin', 'Gddl', 'gddl@gddl.fr', '$argon2i$v=19$m=65536,t=4,p=1$ZzZsTUFJa2pZUEpvMXZnVw$AEZ0KtfX7E+CccNboaCtYE+uwpuVyTLJx2Us140SQis', NULL, 2, NULL, '2025-09-19 11:01:44', NULL, NULL, 1, NULL);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `abonnements`
+--
+ALTER TABLE `abonnements`
+  ADD PRIMARY KEY (`id_abonnement`);
+
+--
+-- Indexes for table `auteurs`
+--
+ALTER TABLE `auteurs`
+  ADD PRIMARY KEY (`id_auteur`);
+
+--
+-- Indexes for table `carnet_adresses`
+--
+ALTER TABLE `carnet_adresses`
+  ADD PRIMARY KEY (`id_carnet_a`),
+  ADD KEY `id_user` (`id_user`);
+
+--
+-- Indexes for table `civilites`
+--
+ALTER TABLE `civilites`
+  ADD PRIMARY KEY (`id_civilite`);
+
+--
+-- Indexes for table `emprunt`
+--
+ALTER TABLE `emprunt`
+  ADD PRIMARY KEY (`id_emprunt`),
+  ADD UNIQUE KEY `emprunt_num_envoi` (`emprunt_num_envoi`),
+  ADD UNIQUE KEY `emprunt_num_retour` (`emprunt_num_retour`),
+  ADD KEY `id_exemplaire` (`id_exemplaire`),
+  ADD KEY `id_carnet_a` (`id_carnet_a`),
+  ADD KEY `id_user` (`id_user`);
+
+--
+-- Indexes for table `exemplaires`
+--
+ALTER TABLE `exemplaires`
+  ADD PRIMARY KEY (`id_exemplaire`),
+  ADD KEY `id_livre` (`id_livre`);
+
+--
+-- Indexes for table `faq`
+--
+ALTER TABLE `faq`
+  ADD PRIMARY KEY (`id_faq`);
+
+--
+-- Indexes for table `favoris`
+--
+ALTER TABLE `favoris`
+  ADD PRIMARY KEY (`id_favoris`),
+  ADD KEY `id_livre` (`id_livre`),
+  ADD KEY `id_user` (`id_user`);
+
+--
+-- Indexes for table `genres`
+--
+ALTER TABLE `genres`
+  ADD PRIMARY KEY (`id_genre`);
+
+--
+-- Indexes for table `langues`
+--
+ALTER TABLE `langues`
+  ADD PRIMARY KEY (`id_langue`);
+
+--
+-- Indexes for table `livres`
+--
+ALTER TABLE `livres`
+  ADD PRIMARY KEY (`id_livre`),
+  ADD UNIQUE KEY `livre_isbn` (`livre_isbn`),
+  ADD KEY `id_langue` (`id_langue`);
+
+--
+-- Indexes for table `livres_auteurs`
+--
+ALTER TABLE `livres_auteurs`
+  ADD PRIMARY KEY (`id_livre_auteur`),
+  ADD KEY `id_livre` (`id_livre`),
+  ADD KEY `id_auteur` (`id_auteur`);
+
+--
+-- Indexes for table `livres_genres`
+--
+ALTER TABLE `livres_genres`
+  ADD PRIMARY KEY (`id_livre_genre`),
+  ADD KEY `id_livre` (`id_livre`),
+  ADD KEY `id_genre` (`id_genre`);
+
+--
+-- Indexes for table `livres_series`
+--
+ALTER TABLE `livres_series`
+  ADD PRIMARY KEY (`id_livre_serie`),
+  ADD KEY `id_livre` (`id_livre`),
+  ADD KEY `id_serie` (`id_serie`);
+
+--
+-- Indexes for table `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id_role`);
+
+--
+-- Indexes for table `series`
+--
+ALTER TABLE `series`
+  ADD PRIMARY KEY (`id_serie`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id_user`),
+  ADD KEY `id_civilite` (`id_civilite`),
+  ADD KEY `id_abonnement` (`id_abonnement`),
+  ADD KEY `id_role` (`id_role`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `abonnements`
+--
+ALTER TABLE `abonnements`
+  MODIFY `id_abonnement` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `auteurs`
+--
+ALTER TABLE `auteurs`
+  MODIFY `id_auteur` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `carnet_adresses`
+--
+ALTER TABLE `carnet_adresses`
+  MODIFY `id_carnet_a` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `civilites`
+--
+ALTER TABLE `civilites`
+  MODIFY `id_civilite` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `emprunt`
+--
+ALTER TABLE `emprunt`
+  MODIFY `id_emprunt` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `exemplaires`
+--
+ALTER TABLE `exemplaires`
+  MODIFY `id_exemplaire` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `faq`
+--
+ALTER TABLE `faq`
+  MODIFY `id_faq` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `favoris`
+--
+ALTER TABLE `favoris`
+  MODIFY `id_favoris` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `genres`
+--
+ALTER TABLE `genres`
+  MODIFY `id_genre` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `langues`
+--
+ALTER TABLE `langues`
+  MODIFY `id_langue` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `livres`
+--
+ALTER TABLE `livres`
+  MODIFY `id_livre` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `livres_auteurs`
+--
+ALTER TABLE `livres_auteurs`
+  MODIFY `id_livre_auteur` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `livres_genres`
+--
+ALTER TABLE `livres_genres`
+  MODIFY `id_livre_genre` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `livres_series`
+--
+ALTER TABLE `livres_series`
+  MODIFY `id_livre_serie` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id_role` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `series`
+--
+ALTER TABLE `series`
+  MODIFY `id_serie` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `carnet_adresses`
+--
+ALTER TABLE `carnet_adresses`
+  ADD CONSTRAINT `carnet_adresses_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`);
+
+--
+-- Constraints for table `emprunt`
+--
+ALTER TABLE `emprunt`
+  ADD CONSTRAINT `emprunt_ibfk_1` FOREIGN KEY (`id_exemplaire`) REFERENCES `exemplaires` (`id_exemplaire`),
+  ADD CONSTRAINT `emprunt_ibfk_2` FOREIGN KEY (`id_carnet_a`) REFERENCES `carnet_adresses` (`id_carnet_a`),
+  ADD CONSTRAINT `emprunt_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`);
+
+--
+-- Constraints for table `exemplaires`
+--
+ALTER TABLE `exemplaires`
+  ADD CONSTRAINT `exemplaires_ibfk_1` FOREIGN KEY (`id_livre`) REFERENCES `livres` (`id_livre`);
+
+--
+-- Constraints for table `favoris`
+--
+ALTER TABLE `favoris`
+  ADD CONSTRAINT `favoris_ibfk_1` FOREIGN KEY (`id_livre`) REFERENCES `livres` (`id_livre`),
+  ADD CONSTRAINT `favoris_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`);
+
+--
+-- Constraints for table `livres`
+--
+ALTER TABLE `livres`
+  ADD CONSTRAINT `livres_ibfk_1` FOREIGN KEY (`id_langue`) REFERENCES `langues` (`id_langue`);
+
+--
+-- Constraints for table `livres_auteurs`
+--
+ALTER TABLE `livres_auteurs`
+  ADD CONSTRAINT `livres_auteurs_ibfk_1` FOREIGN KEY (`id_livre`) REFERENCES `livres` (`id_livre`),
+  ADD CONSTRAINT `livres_auteurs_ibfk_2` FOREIGN KEY (`id_auteur`) REFERENCES `auteurs` (`id_auteur`);
+
+--
+-- Constraints for table `livres_genres`
+--
+ALTER TABLE `livres_genres`
+  ADD CONSTRAINT `livres_genres_ibfk_1` FOREIGN KEY (`id_livre`) REFERENCES `livres` (`id_livre`),
+  ADD CONSTRAINT `livres_genres_ibfk_2` FOREIGN KEY (`id_genre`) REFERENCES `genres` (`id_genre`);
+
+--
+-- Constraints for table `livres_series`
+--
+ALTER TABLE `livres_series`
+  ADD CONSTRAINT `livres_series_ibfk_1` FOREIGN KEY (`id_livre`) REFERENCES `livres` (`id_livre`),
+  ADD CONSTRAINT `livres_series_ibfk_2` FOREIGN KEY (`id_serie`) REFERENCES `series` (`id_serie`);
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`id_civilite`) REFERENCES `civilites` (`id_civilite`),
+  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`id_abonnement`) REFERENCES `abonnements` (`id_abonnement`),
+  ADD CONSTRAINT `users_ibfk_3` FOREIGN KEY (`id_role`) REFERENCES `roles` (`id_role`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
