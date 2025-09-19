@@ -12,3 +12,5 @@ include($_SERVER['DOCUMENT_ROOT'] . '/public/blocks/faq.php');
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/public/blocks/footer.php');
 ?>
+
+test
