@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BibliHome</title>
     <meta name="description" content="BibliHome - Une bibliothèque accessible à tous">
-    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/css/style.css">
-    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/css/searchbar.css">
+    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/css/base.css">
     <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/css/generic.css">
+    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/css/components.css">
+    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/fo/css/home.css">
     <!-- Font Awesome -->
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" />
@@ -21,7 +22,7 @@
 
         <nav class="flex-row jc-space-between ai-center">
             <div class="left-side flex-row jc-space-between ai-center">
-                <a href="/index.php"><img src="../assets/img/logos/text circle fill.png" alt="BibliHome"></a>
+                <a href="/index.php"><img src="../assets/fo/img/logos/text circle fill.png" alt="BibliHome"></a>
 
                 <!-- <form class="searchbar" action="/catalogue.php" method="get">
                     <input type="text" name="" placeholder="Rechercher un livre, un auteur…">
@@ -48,7 +49,7 @@
                 <a id="accueil" href="/index.php">Accueil</a>
                 <a id="catalogue" href="/catalogue.php">Catalogue</a>
                 <a id="identify-button" class="flex-row" href="/login.php">
-                    <img src="../assets/img/icons/login.png" alt="S'identifier"> S'identifier
+                    <img src="../assets/fo/img/icons/login.png" alt="S'identifier"> S'identifier
                 </a>
             </div>
         </nav>

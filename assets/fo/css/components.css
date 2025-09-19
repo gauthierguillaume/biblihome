@@ -82,3 +82,38 @@ input:not(:placeholder-shown) ~ .reset {
 	width: 17px;
 	margin-top: 3px;
 }
+
+/* ------------- SOULIGNAGES ------------- */
+/* 1) Les h1/h2 ne prennent que la largeur de leur texte */
+h1,
+h2 {
+	position: relative;
+	display: inline-block; /* clé pour éviter 100% de largeur */
+	font-weight: 800;
+	color: #eee6dd;
+}
+
+/* Si tu veux centrer le titre tout en restant inline-block : */
+h1,
+h2 {
+	margin-inline: auto;
+} /* fonctionne si le parent a text-align: center */
+section,
+header,
+.container {
+	text-align: center;
+} /* selon ta structure */
+
+/* 2) Soulignement proportionnel avec segments CMY à la fin */
+h1::after,
+h2::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -8px; /* espace sous le texte */
+	width: 100%; /* = largeur du mot seulement grâce à inline-block */
+	height: 4px;
+
+	/* 80% blanc, puis 3 segments de 6.66% chacun (proportionnels) */
+	background: linear-gradient(to right, #eee6dd 0%, #eee6dd 80%, #faff00 80%, /* jaune */ #faff00 86.666%, #ff00a8 86.666%, #ff00a8 93.333%, #00e5ff 93.333%, #00e5ff 100%);
+}

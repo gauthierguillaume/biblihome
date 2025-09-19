@@ -1,63 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
-
-:root {
-	/* Font colors */
-	--dm_text: #e6e1db;
-	--dm_background: #3e3a36;
-	--dm_container: #1c1a17;
-	--dm_transparency: rgba(28, 26, 23, 0.6);
-	--yellow: #cccc00;
-	--magenta: #cc00cc;
-	--cyan: #00cccc;
-}
-
-:root {
-	/* Font sizes */
-	--font-title: 48px;
-	--font-subtitle: 32px;
-	--font-title: 24px;
-	--font-text: 16px;
-	--font-text-mobile: 14px;
-}
-
-* {
-	margin: 0;
-	padding: 0;
-	text-decoration: none;
-	list-style-type: none;
-	box-sizing: border-box;
-	font-family: "Space Grotesk", sans-serif;
-}
-
-a {
-	color: inherit;
-}
-
-h1 {
-	font-size: var(--font-title);
-	font-weight: bold;
-}
-
-h2 {
-	font-size: var(--font-subtitle);
-	font-weight: bold;
-}
-
-body {
-	background-color: var(--dm_background);
-	color: var(--dm_text);
-	font-size: var(--font-text);
-	line-height: 1.4;
-}
-
-section {
-	padding: 2rem;
-}
-
-.container {
-	max-width: 1200px;
-	margin: auto;
-}
+@import url("base.css");
+@import url("generic.css");
+@import url("components.css");
 
 /* ------------- HEADER ------------- */
 
@@ -117,7 +60,7 @@ nav a {
 }
 
 #identify-button:hover {
-	background-color: var(--dm_container);
+	background-color: var(--dm_transparency);
 	color: var(--cyan);
 }
 
@@ -154,7 +97,7 @@ nav a {
 }
 
 .catalog .books .title {
-	font-size: var(--font-title);
+	font-size: var(--font-book-title);
 	font-weight: bold;
 }
 
@@ -216,7 +159,51 @@ nav a {
 
 /* ------------- FAQ ------------- */
 
+.faq {
+	gap: 2rem;
+}
+
+.faqs {
+	padding: 1rem 0;
+	gap: 0.8rem;
+}
+
+summary {
+	background-color: var(--dm_container);
+	padding: 1rem 2rem;
+	border-radius: 12px;
+	text-align: left;
+	cursor: pointer;
+}
+
+summary img {
+	width: 1.5rem;
+}
+
+.faq .faqs details p {
+	margin-top: 0.5rem;
+	padding: 0 1rem 0 2rem;
+	text-align: left;
+}
+
+details[open] summary img {
+	transform: rotate(90deg);
+	transition: transform 0.5s ease;
+}
+
+details[open] summary {
+	background-color: var(--dm_transparency);
+	color: var(--dm_text);
+}
+
+summary:hover {
+	background-color: var(--dm_transparency);
+	transition: 0.5s;
+	color: var(--dm_text);
+}
+
 /* ------------- FOOTER ------------- */
+
 footer {
 	padding: 1rem 4rem;
 }
@@ -272,3 +259,6 @@ footer .socials {
 	font-size: 2rem;
 	color: var(--cyan);
 }
+
+/* ------------- MEDIA QUERIES ------------- */
+

@@ -2,7 +2,7 @@
 
 <footer class="flex-row jc-space-between ai-center">
     <div class="left-side flex-row jc-space-between ai-center">
-        <a href="/index.php"><img src="/assets/img/logos/text circle fill.png" alt="BibliHome"></a>
+        <a href="/index.php"><img src="/assets/fo/img/logos/text circle fill.png" alt="BibliHome"></a>
         <p>
             © 2025 BibliHome — Conçu avec passion par GDDL.<br>
             Des histoires façonnées pour voyager jusqu’à vous.
