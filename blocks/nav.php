@@ -21,7 +21,7 @@
 
         <nav class="flex-row jc-space-between ai-center">
             <div class="left-side flex-row jc-space-between ai-center">
-                <a href="/index.php"><img src="/assets/img/logos/text circle fill.png" alt="BibliHome"></a>
+                <a href="/index.php"><img src="../assets/img/logos/text circle fill.png" alt="BibliHome"></a>
 
                 <!-- <form class="searchbar" action="/catalogue.php" method="get">
                     <input type="text" name="" placeholder="Rechercher un livre, un auteur…">
@@ -48,7 +48,7 @@
                 <a id="accueil" href="/index.php">Accueil</a>
                 <a id="catalogue" href="/catalogue.php">Catalogue</a>
                 <a id="identify-button" class="flex-row" href="/login.php">
-                    <img src="/assets/img/icons/login.png" alt="S'identifier"> S'identifier
+                    <img src="../assets/img/icons/login.png" alt="S'identifier"> S'identifier
                 </a>
             </div>
         </nav>

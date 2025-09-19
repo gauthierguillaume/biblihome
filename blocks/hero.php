@@ -6,7 +6,7 @@
         <h2>Prêts à libérer votre imagination ?</h2>
         <p>Identifiez-vous pour commencer l’aventure.</p>
         <a id="identify-button" class="flex-row" href="/login.php">
-            <img src="/assets/img/icons/login.png" alt="S'identifier"> S'identifier
+            <img src="../assets/img/icons/login.png" alt="S'identifier"> S'identifier
         </a>
     </div>
 </section>
