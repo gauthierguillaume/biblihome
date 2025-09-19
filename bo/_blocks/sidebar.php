@@ -84,7 +84,7 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
                     <li>
                         <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/donnees.php?zone=donnees" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "donnees"){ echo "active";}?>">
                             <span class="las la-file-alt"></span>
-                            <small>Donnees</small>
+                            <small>Données</small>
                         </a>
                     </li>
 
