@@ -102,9 +102,6 @@
     font-weight: 600;
 }
 
-.sidebar {
-    /*overflow-y: auto;*/
-}
 
 .side-menu ul {
     text-align: center;
@@ -371,7 +368,7 @@ input, button, select {
     color: #666;
 }
 
-.add button, .add a{
+.add button, .add a, .add input[type="submit"]{
     background: var(--main-color);
     color: #fff;
     height: 37px;
@@ -471,6 +468,35 @@ table tbody tr {
     border-radius: 20px;
     font-size: .8rem;
 }
+
+/* new css */
+
+.donnees{
+    width: 32%;
+    gap: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @media only screen and (max-width: 1200px) {
     .analytics {
