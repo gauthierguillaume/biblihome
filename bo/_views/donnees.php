@@ -89,7 +89,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
         <div width="100%" class="flexRow spaceAround">
 
             <!-- genres -->
-            <div>
+            <div class="flexCol donnees">
                 <!-- button add genre -->
                 <div class="add">
                     <a href="livres.php?zone=livres&action=modifGenres">Gérer les genres</a>     
@@ -103,14 +103,14 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
                         <input type="text" name="genre_tag">
                     </div>
 
-                    <div>
+                    <div class="add">
                         <input type="submit" value="Enregistrer" name="addgenre">
                     </div>
 
                 </form>
 
                 <!-- table genre -->
-                <table width="32%">
+                <table width="100%">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -153,7 +153,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
             </div>
 
             <!-- series -->
-             <div>
+             <div class="flexCol donnees">
                 <!-- button add serie -->
                 <div class="add">              
                     <a href="livres.php?zone=livres&action=modifSeries">Gérer les séries</a>   
@@ -167,14 +167,14 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
                         <input type="text" name="serie_nom">
                     </div>
 
-                    <div>
+                    <div class="add">
                         <input type="submit" value="Enregistrer" name="addserie">
                     </div>
 
                 </form>
 
                 <!-- table serie -->
-                <table width="32%">
+                <table width="100%">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -216,7 +216,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
             </div>
             
             <!-- langues -->
-            <div>    
+            <div class="flexCol donnees">    
                 
                 <div class="add">           
                     <a href="livres.php?zone=livres&action=modifLangues">Gérer les langues</a>
@@ -230,13 +230,13 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
                         <input type="text" name="langue_nom">
                     </div>
 
-                    <div>
+                    <div class="add">
                         <input type="submit" value="Enregistrer" name="addlangue">
                     </div>
 
                 </form>
 
-                <table width="32%">
+                <table width="100%">
                     <thead>
                         <tr>
                             <th>#</th>
