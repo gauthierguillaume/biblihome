@@ -476,28 +476,6 @@ table tbody tr {
     gap: 20px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @media only screen and (max-width: 1200px) {
     .analytics {
         grid-template-columns: repeat(2, 1fr);
