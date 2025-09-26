@@ -36,6 +36,9 @@ $selectUser = $db->prepare('SELECT * FROM users NATURAL JOIN civilites
 ');
 $selectUser->execute();
 
+$select_abo = $db->prepare('SELECT * FROM abonnements');
+$select_abo->execute();
+
 if(isset($_POST['add_abo'])){
   // Recupère les données des inputs
   $title = htmlspecialchars(trim($_POST['abo_name']));
@@ -104,90 +107,117 @@ if(isset($_POST['modifAbo'])){
 ?>
 
 <!-- Fourmulaire d'entrée des abonnements -->
-
-<h3>Entrée un abonnement</h3>
-
-<form method="POST" name="add_abo" class="flexCol" style="width:20%; gap: 5px;">
-  <label for="abo_name">Titre de l'abonnement</label>
-  <input type="text" name="abo_name" placeholder="Nom de l'abonnement" required>
-
-  <label for="abo_accroche">Phrase d'accroche</label>
-  <input type="text" placeholder="Phrase d'accroche" name="abo_accroche" required>
-
-  <label for="abo_desc">Description de l'abonnement</label>
-  <input type="text" placeholder="Description de l'abonnement" name="abo_desc" required>
-
-  <label for="abo_time">Durée de l'abonnement</label>
-  <input type="number" placeholder="Durée de l'abonnement" name="abo_time" min="1" required>
-
-  <label for="abo_perks">Avantages de l'abonnement</label>
-  <input type="text" name="abo_perks" placeholder="Avantage de l'abonnement" required>
-
-  <label for="abo_price">Prix de l'abonnement</label>
-  <input type="number" step="0.01" placeholder="Prix de l'abonnement" name="abo_price" required>
-
-  <div>
-    <input type="submit" value="Ajouter l'abonnement" name="add_abo">
-  </div>
-</form>
-
-<!-- Modifier un abonnement -->
-
-<h3>Modifier un abonnement</h3>
-
-<form method="POST" name="modifAbo" class="flexCol" style="width:20%; gap: 5px;">
-  <label for="abo_select_update">Sélectionner un abonnement</label>
-  <select name="abo_select_update">
-  <?php while($abo_info = $select_abo_info->fetch(PDO::FETCH_OBJ)){
-  ?>
-      <option value="<?php echo $abo_info->id_abonnement;?>"><?php echo $abo_info->abonnement_nom;?></option>
-      <?php
-  }
-  ?>
-  </select>
-
-  <label for="abo_name_modify">Modifier le titre de l'abonnement</label>
-  <input type="text" name="abo_name_modify" placeholder="Nom de l'abonnement">
-
-  <label for="abo_accroche_modify">Modifier la phrase d'accroche</label>
-  <input type="text" name="abo_accroche_modify" placeholder="Phrase d'accroche">
-
-  <label for="abo_desc_modify">Modifier la description de l'abonnement</label>
-  <input type="text" name="abo_desc_modify" placeholder="Modifier la description">
-
-  <label for="abo_time_modify">Modifier la durée de l'abonnement</label>
-  <input type="text" name="abo_time_modify" placeholder="Modifier la durée">
-
-  <label for="abo_perks_modify">Modifier les avantages de l'abonnement</label>
-  <input type="text" name="abo_perks_modify" placeholder="Modifier les avantages">
-
-  <label for="abo_price_modify">Modifier le prix de l'abonnement</label>
-  <input type="number" placeholder="Prix de l'abonnement" name="abo_price_modify">
-  <div>
-    <input type="submit" value="Modifier l'abonnement" name="modifAbo">
+<div class="flexRow formContent">
+  <div class="flexCol formWidth">
+    <h3>Entrée un abonnement</h3>
+    <form method="POST" name="add_abo" class="flexCol formPadding" style="width:20%; gap: 5px;">
+      <div class="flexCol formMargin formGap">
+        <label for="abo_name" class="labelWidth">Titre de l'abonnement</label>
+        <input type="text" name="abo_name" placeholder="Nom de l'abonnement" required class="inputWidth">
+      </div>
+      <div class="flexCol formMargin formGap">
+        <label for="abo_accroche" class="labelWidth">Phrase d'accroche</label>
+        <input type="text" placeholder="Phrase d'accroche" name="abo_accroche" required class="inputWidth">
+      </div>
+      <div class="flexCol formMargin formGap">
+        <label for="abo_desc" class="labelWidth">Description de l'abonnement</label>
+        <input type="text" placeholder="Description de l'abonnement" name="abo_desc" required class="inputWidth">
+      </div>
+      <div class="flexCol formMargin formGap">
+        <label for="abo_time" class="labelWidth">Durée de l'abonnement</label>
+        <input type="number" placeholder="Durée de l'abonnement" name="abo_time" min="1" required class="inputWidth">
+      </div>
+      <div class="flexCol formMargin formGap">
+        <label for="abo_perks" class="labelWidth">Avantages de l'abonnement</label>
+        <input type="text" name="abo_perks" placeholder="Avantage de l'abonnement" required class="inputWidth">
+      </div>
+      <div class="flexCol formMargin formGap">
+        <label for="abo_price" class="labelWidth">Prix de l'abonnement</label>
+        <input type="number" step="0.01" placeholder="Prix de l'abonnement" name="abo_price" required class="inputWidth">
+      </div>
+      <div>
+        <input type="submit" value="Ajouter l'abonnement" name="add_abo" class="subBtn">
+      </div>
+    </form>
   </div>
 
-</form>
 
-<!-- Supprimer un abonnement -->
+  <!-- Modifier un abonnement -->
+  <div class="flexCol formWidth">
+    <h3>Modifier un abonnement</h3>
 
-<h3>Supprimer un abonnement</h3>
+    <form method="POST" name="modifAbo" class="flexCol formPadding" style="width:20%; gap: 5px;">
+      <div class="flexCol formMargin formGap">
+        <label for="abo_select_update" class="labelWidth">Sélectionner un abonnement</label>
+        <select name="abo_select_update" class="inputWidth">
+        <?php while($abo_info = $select_abo_info->fetch(PDO::FETCH_OBJ)){
+        ?>
+            <option value="<?php echo $abo_info->id_abonnement;?>"><?php echo $abo_info->abonnement_nom;?></option>
+            <?php
+        }
+        ?>
+        </select>
+      </div>
 
-<form method="POST" class="flexCol" name="delete_abo" style="width:20%; gap: 5px;">
-  <label for="abo_select">Sélectionner un abonnement</label>
-  <select name="abo_select">
-    <?php while($abo_infos = $select_abo_delete->fetch(PDO::FETCH_OBJ)){
-  ?>
-    <option value="<?php echo $abo_infos->id_abonnement;?>"><?php echo $abo_infos->abonnement_nom;?></option>
-    <?php
-  }
-  ?>
-  </select>
-  <div>
-    <input type="submit" value="Supprimer l'abonnement" name="delete_abo">
+      <div class="flexCol formMargin formGap">
+        <label for="abo_name_modify" class="labelWidth">Modifier le titre de l'abonnement</label>
+        <input type="text" name="abo_name_modify" placeholder="Nom de l'abonnement" class="inputWidth">
+      </div>
+
+      <div class="flexCol formMargin formGap">
+        <label for="abo_accroche_modify" class="labelWidth">Modifier la phrase d'accroche</label>
+        <input type="text" name="abo_accroche_modify" placeholder="Phrase d'accroche" class="inputWidth">
+      </div>
+
+      <div class="flexCol formMargin formGap">
+        <label for="abo_desc_modify" class="labelWidth">Modifier la description de l'abonnement</label>
+        <input type="text" name="abo_desc_modify" placeholder="Modifier la description" class="inputWidth">
+      </div>
+
+      <div class="flexCol formMargin formGap">
+        <label for="abo_time_modify" class="labelWidth">Modifier la durée de l'abonnement</label>
+        <input type="text" name="abo_time_modify" placeholder="Modifier la durée" class="inputWidth">
+      </div>
+
+      <div class="flexCol formMargin formGap">
+        <label for="abo_perks_modify" class="labelWidth">Modifier les avantages de l'abonnement</label>
+        <input type="text" name="abo_perks_modify" placeholder="Modifier les avantages" class="inputWidth">
+      </div>
+
+      <div class="flexCol formMargin formGap">
+        <label for="abo_price_modify" class="labelWidth">Modifier le prix de l'abonnement</label>
+        <input type="number" placeholder="Prix de l'abonnement" name="abo_price_modify" class="inputWidth">
+      </div>
+
+      <div>
+        <input type="submit" value="Modifier l'abonnement" name="modifAbo" class="subBtn">
+      </div>
+
+    </form>
   </div>
-</form>
+  <!-- Supprimer un abonnement -->
+  <div class="flexCol formWidth">
+    <h3>Supprimer un abonnement</h3>
 
+    <form method="POST" class="flexCol formPadding" name="delete_abo" style="width:20%; gap: 5px;">
+      
+      <div class="flexCol formMargin formGap">
+        <label for="abo_select" class="labelWidth">Sélectionner un abonnement</label>
+        <select name="abo_select" class="inputWidth">
+          <?php while($abo_infos = $select_abo_delete->fetch(PDO::FETCH_OBJ)){
+        ?>
+          <option value="<?php echo $abo_infos->id_abonnement;?>"><?php echo $abo_infos->abonnement_nom;?></option>
+          <?php
+        }
+        ?>
+        </select>
+      </div>
+      <div>
+        <input type="submit" value="Supprimer l'abonnement" name="delete_abo" class="subBtn">
+      </div>
+    </form>
+  </div>
+</div>
 <!-- Tableaux des clients/employés -->
 
 <?php
@@ -198,33 +228,34 @@ if(isset($_POST['modifAbo'])){
     <thead>
       <tr>
         <th>ID</th>
-        <th><span class="las la-sort"></span> INFOS</th>
-        <th><span class="las la-sort"></span> RÔLES</th>
-        <th><span class="las la-sort"></span> DATE D'AJOUT</th>
-        <th><span class="las la-sort"></span> CIVILITÉ</th>
-        <th><span class="las la-sort"></span> ABONNEMENTS</th>
+        <th><span class="las la-sort pLeft"></span> INFOS</th>
+        <th><span class="las la-sort pLeft"></span> TITRES ET PRIX</th>
+        <th><span class="las la-sort pLeft"></span> PHRASE D'ACCROCHE</th>
+        <th><span class="las la-sort pLeft"></span> DESCRIPTION</th>
+        <th><span class="las la-sort pLeft"></span> AVANTAGES</th>
+        <th>ACTIONS</th>
       </tr>
     </thead>
     <tbody>
   <?php
-    while($users = $selectUser->fetch(PDO::FETCH_OBJ)){
+    while($abo = $select_abo->fetch(PDO::FETCH_OBJ)){
   ?>
       <tr>
-        <td>
-          <?php echo $users->id_user;?>
+        <td class="pLeftTd maxWidth">
+          <?php echo $abo->id_abonnement;?>
         </td>
-        <td>
+        <td class="pLeftTd maxWidth">
           <div class="client">
-            <div class="client-img bg-img" style="background-image: url(img/3.jpeg)"></div>
             <div class="client-info">
-              <h4><?php echo $users->user_nom;?> <?php echo $users->user_prenom;?></h4>
-              <small><?php echo $users->user_mail;?></small>
+              <h4><?php echo $abo->abonnement_nom;?></h4>
+              <small><?php echo $abo->abonnement_prix;?>€</small>
             </div>
           </div>
         </td>
-        <td><?php echo $users->id_role;?></td>
-        <td><?php echo $users->user_date_creation;?></td>
-        <td><?php echo $users->civilite_nom?></td>
+        <td class="pLeftTd maxWidth"><?php echo $abo->abonnement_duree;?></td>
+        <td class="pLeftTd maxWidth"><?php echo $abo->abonnement_blurb;?></td>
+        <td class="pLeftTd maxWidth"><?php echo $abo->abonnement_desc;?></td>
+        <td class="pLeftTd maxWidth"><?php echo $abo->abonnement_perks;?></td>
         <td>
           <div class="actions">
             <span class="lab la-telegram-plane"></span>
