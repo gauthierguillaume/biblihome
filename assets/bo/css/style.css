@@ -471,6 +471,70 @@ table tbody tr {
 
 /* new css */
 
+/* --- ABONNEMENTS BO --- */
+
+.formContent {
+    width: 100%;
+    padding-left: 100px;
+    margin-bottom: 40px;
+}
+
+.formContent .formWidth {
+    width: 33%;
+}
+
+.formContent .formWidth h3 {
+    text-transform: uppercase;
+}
+
+.formPadding {
+    padding: 10px 0;
+}
+
+.labelWidth {
+    width: 300px;
+}
+
+.inputWidth {
+    width: 300px;
+    padding: 7px 5px;
+}
+
+.subBtn {
+    padding: 10px 20px;
+    background: #22BAA0;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.formMargin {
+    margin: 10px 0;
+}
+
+.formGap {
+    gap: 10px;
+}
+
+.pLeft{
+    padding-left: 15px;
+}
+
+.pLeftTd {
+    padding-left: 35px;
+}
+
+.maxWidth {
+    max-width: 200px;
+    white-space: normal;
+    word-break: break-word;
+    overflow-x: auto;
+}
+
+/* donnees */
+
 .recordsContainer{
     width: 100%;
     overflow-x: auto;
