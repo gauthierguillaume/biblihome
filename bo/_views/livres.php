@@ -174,6 +174,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
         $titre = htmlspecialchars($_POST['livre_titre']);
         $isbn = htmlspecialchars($_POST['livre_isnb']);
         $langue = $_POST['id_langue'];
+        $auteur = $_POST['id_auteur'];
         $genre = $_POST['id_genre'];
         $serie = $_POST['id_serie'];
         $synopsis = $_POST['livre_synopsis']; //this input isn't sanitized cuz it receives html info. it SHOULD however, in practice, be ran through some kind of "remove all the disallowed html tags server side too" script if we were to do this proper
@@ -232,20 +233,29 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
                 }
             }
 
+            //auteur
+            if(!empty($auteur)){
+                $insertauteur = $db->prepare("INSERT INTO livres_auteurs SET
+                id_auteur = ?,
+                id_livre = ?
+                ");
+                $insertauteur->execute([$auteur, $newId]);
+            }
+
             //genre
             if(!empty($genre)){
-                $insertGenre = $db->prepare("UPDATE livres SET
-                id_genre = ?
-                WHERE id_livre = ?
+                $insertGenre = $db->prepare("INSERT INTO livres_genres SET
+                id_genre = ?,
+                id_livre = ?
                 ");
                 $insertGenre->execute([$genre, $newId]);
             }
 
             //serie
             if(!empty($serie)){
-                $insertSerie = $db->prepare("UPDATE livres SET
-                id_serie = ?
-                WHERE id_livre = ?
+                $insertSerie = $db->prepare("INSERT INTO livres_series SET
+                id_serie = ?,
+                id_livre = ?
                 ");
                 $insertSerie->execute([$serie, $newId]);
             }
@@ -330,7 +340,20 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
                 ?>
             </select>
         </div>
-        
+          
+        <div>
+            <label for="">Auteur</label>
+            <select name="id_auteur" id="" value="">
+                <?php
+                while($sA = $selectAuteurs->fetch(PDO::FETCH_OBJ)){
+                    ?>
+                        <option value="<?php echo $sA->id_auteur;?>"><?php echo $sA->auteur_prenom;?> <?php echo $sA->auteur_nom;?></option>
+                    <?php
+                }
+                ?>
+            </select>
+        </div>
+
         <div>
             <label for="">Genre</label>
             <select name="id_genre" id="">
