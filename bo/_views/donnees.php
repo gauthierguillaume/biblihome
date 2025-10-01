@@ -26,50 +26,77 @@ include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/ariane.php');
 
     //fonction add genre
     if(isset($_POST['addgenre'])){
+
         $genre_tag = htmlspecialchars($_POST['genre_tag']);
 
-        $insert_genre = $db->prepare('INSERT INTO genres SET
-            genre_tag = ?
-        ');
-        $insert_genre->execute([$genre_tag]);
+        if(!empty($genre_tag)){
 
-        $newId = $db->lastInsertId();
+            $insert_genre = $db->prepare('INSERT INTO genres SET
+                genre_tag = ?
+            ');
+            $insert_genre->execute([$genre_tag]);
 
-        echo "<script language='javascript'>
-            document.location.replace('donnees.php?zone=donnees&action=modifGenres&id=$newId')
+            $newId = $db->lastInsertId();
+
+            echo "<script language='javascript'>
+                document.location.replace('donnees.php?zone=donnees&action=modifGenres&id=$newId')
+                </script>";
+        }else{
+            $_SESSION['flash']['danger'] = "Ne pas laisser la saisie vide.";
+            echo "<script language='javascript'>
+            document.location.replace('donnees.php?zone=donnees&action=modifGenres')
             </script>";
+        }
     }
 
     //fonction add série
     if(isset($_POST['addserie'])){
+        
         $serie_nom = htmlspecialchars($_POST['serie_nom']);
+        
+        if(!empty($serie_nom)){
 
-        $insert_genre = $db->prepare('INSERT INTO series SET
-            serie_nom = ?
-        ');
-        $insert_genre->execute([$serie_nom]);
+            $insert_serie = $db->prepare('INSERT INTO series SET
+                serie_nom = ?
+            ');
+            $insert_serie->execute([$serie_nom]);
 
-        $newId = $db->lastInsertId();
+            $newId = $db->lastInsertId();
 
-        echo "<script language='javascript'>
-            document.location.replace('donnees.php?zone=donnees&action=modifSeries&id=$newId')
-            </script>";
+            echo "<script language='javascript'>
+                document.location.replace('donnees.php?zone=donnees&action=modifSeries&id=$newId')
+                </script>";
+        }else{
+            $_SESSION['flash']['danger'] = "Ne pas laisser la saisie vide.";
+            echo "<script language='javascript'>
+                document.location.replace('donnees.php?zone=donnees&action=modifSeries')
+                </script>";
+        }
     }
 
     //fonction add langue
     if(isset($_POST['addlangue'])){
+        
         $langue_nom = htmlspecialchars($_POST['langue_nom']);
 
-        $insert_genre = $db->prepare('INSERT INTO langues SET
-            langue_nom = ?
-        ');
-        $insert_genre->execute([$langue_nom]);
+        if(!empty($langue_nom)){
 
-        $newId = $db->lastInsertId();
+            $insert_langue = $db->prepare('INSERT INTO langues SET
+                langue_nom = ?
+            ');
+            $insert_langue->execute([$langue_nom]);
 
-        echo "<script language='javascript'>
-            document.location.replace('donnees.php?zone=donnees&action=modifLangues&id=$newId')
-            </script>";
+            $newId = $db->lastInsertId();
+
+            echo "<script language='javascript'>
+                document.location.replace('donnees.php?zone=donnees&action=modifLangues&id=$newId')
+                </script>";
+            }else{
+                $_SESSION['flash']['danger'] = "Ne pas laisser la saisie vide.";
+                echo "<script language='javascript'>
+                document.location.replace('donnees.php?zone=donnees&action=modifLangues')
+                </script>";
+        }
     }
 
 
@@ -153,17 +180,24 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
 
         //rename form
         if(isset($_POST["rename"])){
-            $renameText = $_POST["renameText"];
+            $renameText = htmlspecialchars(trim($_POST["renameText"]));
+            if(!empty($renameText)){
 
-            $update = $db->prepare('UPDATE genres SET
-                genre_tag = ?
-                WHERE id_genre = ?
-            ');
-            $update->execute([$renameText, $id]);
+                $update = $db->prepare('UPDATE genres SET
+                    genre_tag = ?
+                    WHERE id_genre = ?
+                ');
+                $update->execute([$renameText, $id]);
 
-            echo "<script language='javascript'>
-            document.location.replace('donnees.php?action=modifGenres&id=$id')
-            </script>";
+                echo "<script language='javascript'>
+                document.location.replace('donnees.php?action=modifGenres&id=$id')
+                </script>";
+            }else{
+                $_SESSION['flash']['danger'] = "Ne pas laisser la saisie vide.";
+                echo "<script language='javascript'>
+                document.location.replace('donnees.php?action=modifGenres&id=$id')
+                </script>";
+            }
         }
 
         //transfer form function
@@ -409,17 +443,24 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
 
         //rename form
         if(isset($_POST["rename"])){
-            $renameText = $_POST["renameText"];
+            $renameText = htmlspecialchars(trim($_POST["renameText"]));
+            if(!empty($renameText)){
 
-            $update = $db->prepare('UPDATE series SET
-                serie_nom = ?
-                WHERE id_serie = ?
-            ');
-            $update->execute([$renameText, $id]);
+                $update = $db->prepare('UPDATE series SET
+                    serie_nom = ?
+                    WHERE id_serie = ?
+                ');
+                $update->execute([$renameText, $id]);
 
-            echo "<script language='javascript'>
-            document.location.replace('donnees.php?action=modifSeries&id=$id')
-            </script>";
+                echo "<script language='javascript'>
+                document.location.replace('donnees.php?action=modifSeries&id=$id')
+                </script>";
+            }else{
+                $_SESSION['flash']['danger'] = "Ne pas laisser la saisie vide.";
+                echo "<script language='javascript'>
+                document.location.replace('donnees.php?action=modifSeries&id=$id')
+                </script>";
+            }
         }
 
         //transfer form function
@@ -661,17 +702,24 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
 
         //rename form
         if(isset($_POST["rename"])){
-            $renameText = $_POST["renameText"];
+            $renameText = htmlspecialchars(trim($_POST["renameText"]));
+            if(!empty($renameText)){
 
-            $update = $db->prepare('UPDATE langues SET
-                langue_nom = ?
-                WHERE id_langue = ?
-            ');
-            $update->execute([$renameText, $id]);
+                $update = $db->prepare('UPDATE langues SET
+                    langue_nom = ?
+                    WHERE id_langue = ?
+                ');
+                $update->execute([$renameText, $id]);
 
-            echo "<script language='javascript'>
-            document.location.replace('donnees.php?action=modifLangues&id=$id')
-            </script>";
+                echo "<script language='javascript'>
+                document.location.replace('donnees.php?action=modifLangues&id=$id')
+                </script>";
+            }else{
+                $_SESSION['flash']['danger'] = "Ne pas laisser la saisie vide.";
+                echo "<script language='javascript'>
+                document.location.replace('donnees.php?action=modifLangues&id=$id')
+                </script>";
+            }
         }
 
         //transfer form function

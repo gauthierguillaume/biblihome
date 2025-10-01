@@ -31,8 +31,8 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
         foreach($_SESSION['flash'] as $type => $message){
             ?>
             <div id="zoneDeNotification">
-                <div class="alert alert-<?php echo $type;?>">
-                    <?php echo $message; ?>
+                <div class="alert alert-<?php echo $type;?> flexRow alignCenter JustifyCenter">
+                    <?php if($type = "danger"){ echo '<i class="las la-exclamation-triangle"></i> ';}else if($type = "success"){ echo '<i class="las la-info-circle"></i> ';} echo $message; ?>
                 </div>
             </div>
             <?php
@@ -67,6 +67,12 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
                        <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/livraisons.php?zone=livraisons" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "livraisons"){ echo "active";}?>">
                             <span class="las la-truck"></span>
                             <small>Livraisons</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/utilisateurs.php?zone=utilisateurs" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "utilisateurs"){ echo "active";}?>">
+                            <span class="las la-user-friends"></span>
+                            <small>Utilisateurs</small>
                         </a>
                     </li>
                     <li>
