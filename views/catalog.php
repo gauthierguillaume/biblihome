@@ -86,47 +86,47 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 
         <div class="catalog-row flex-row jc-space-between ai-center wrap">
             <div class="books flex-row jc-flex-start ai-center wrap">
-                <a href="#" class="books-1">
+                <a href="book-detail.php" class="books-1">
                     <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
                     <p class="title">Le Silmarillion</p>
                     <p class="author">JRR Tolkien</p>
                 </a>
-                <a href="#" class="books-2">
+                <a href="book-detail.php" class="books-2">
                     <img src="../assets/fo/img/books/it.png" alt="Livre 2">
                     <p class="title">It</p>
                     <p class="author">Stephen King</p>
                 </a>
-                <a href="#" class="books-3">
+                <a href="book-detail.php" class="books-3">
                     <img src="../assets/fo/img/books/the-witcher.png" alt="Livre 3">
                     <p class="title">The Witcher</p>
                     <p class="author">Andrzej Sapkowski</p>
                 </a>
-                <a href="#" class="books-4">
+                <a href="book-detail.php" class="books-4">
                     <img src="../assets/fo/img/books/la-route.png" alt="Livre 4">
                     <p class="title">La Route</p>
                     <p class="author">Cormac McCarthy</p>
                 </a>
-                <a href="#" class="books-1">
+                <a href="book-detail.php" class="books-1">
                     <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
                     <p class="title">Le Silmarillion</p>
                     <p class="author">JRR Tolkien</p>
                 </a>
-                <a href="#" class="books-1">
+                <a href="book-detail.php" class="books-1">
                     <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
                     <p class="title">Le Silmarillion</p>
                     <p class="author">JRR Tolkien</p>
                 </a>
-                <a href="#" class="books-1">
+                <a href="book-detail.php" class="books-1">
                     <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
                     <p class="title">Le Silmarillion</p>
                     <p class="author">JRR Tolkien</p>
                 </a>
-                <a href="#" class="books-1">
+                <a href="book-detail.php" class="books-1">
                     <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
                     <p class="title">Le Silmarillion</p>
                     <p class="author">JRR Tolkien</p>
                 </a>
-                <a href="#" class="books-1">
+                <a href="book-detail.php" class="books-1">
                     <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
                     <p class="title">Le Silmarillion</p>
                     <p class="author">JRR Tolkien</p>
