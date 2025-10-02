@@ -1,6 +1,6 @@
 </main>
 
-<footer class="flex-row jc-space-between ai-center">
+<footer class="flex-row jc-space-between ai-center wrap">
     <div class="left-side flex-row jc-space-between ai-center">
         <a href="/index.php"><img src="/assets/fo/img/logos/text circle fill.png" alt="BibliHome"></a>
         <p>
@@ -28,6 +28,8 @@
         </div>
     </div>
 </footer>
+
+<script src="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/fo/js/nav.js"></script>
 
 </body>
 

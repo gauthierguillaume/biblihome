@@ -1,4 +1,4 @@
-/* ------------- flex ------------- */
+/* ============= flex ============= */
 
 .flex-row {
 	display: flex;
@@ -22,7 +22,7 @@
 	text-transform: uppercase;
 }
 
-/* ------------- justify-content ------------- */
+/* ============= justify-content ============= */
 
 .jc-center {
 	justify-content: center;
@@ -44,7 +44,7 @@
 	justify-content: flex-end;
 }
 
-/* ------------- align-items ------------- */
+/* ============= align-items ============= */
 
 .ai-center {
 	align-items: center;
@@ -58,7 +58,7 @@
 	align-items: flex-end;
 }
 
-/* ------------- align-content ------------- */
+/* ============= align-content ============= */
 
 .ac-center {
 	align-content: center;

@@ -1,14 +1,14 @@
-/* ------------- SEARCHBAR ------------- */
+/* ============= SEARCHBAR ============= */
 /* From Uiverse.io by satyamchaudharydev */
 /* removing default style of button */
 
-.form button {
+.searchbar button {
 	border: none;
 	background: none;
 	color: var(--dm_text);
 }
 /* styling of whole input container */
-.form {
+.searchbar {
 	--timing: 0.3s;
 	--width-of-input: 300px;
 	--height-of-input: 40px;
@@ -28,7 +28,7 @@
 	background: var(--input-bg, var(--dm_container));
 }
 /* styling of Input */
-.input {
+.searchbar .input {
 	font-size: 0.9rem;
 	background-color: transparent;
 	width: 100%;
@@ -39,7 +39,7 @@
 	color: var(--dm_text);
 }
 /* styling of animated border */
-.form:before {
+.searchbar:before {
 	content: "";
 	position: absolute;
 	background: var(--border-color);
@@ -53,40 +53,40 @@
 	transition: transform var(--timing) ease;
 }
 /* Hover on Input */
-.form:focus-within {
+.searchbar:focus-within {
 	border-radius: var(--after-border-radius);
 }
 
-input:focus {
+.searchbar input:focus {
 	outline: none;
 }
 /* here is code of animated border */
-.form:focus-within:before {
+.searchbar:focus-within:before {
 	transform: scale(1);
 }
 /* styling of close button */
 /* == you can click the close button to remove text == */
-.reset {
+.searchbar .reset {
 	border: none;
 	background: none;
 	opacity: 0;
 	visibility: hidden;
 }
 /* close button shown when typing */
-input:not(:placeholder-shown) ~ .reset {
+.searchbar input:not(:placeholder-shown) ~ .reset {
 	opacity: 1;
 	visibility: visible;
 }
 /* sizing svg icons */
-.form svg {
+.searchbar svg {
 	width: 17px;
 	margin-top: 3px;
 }
 
-/* ------------- SOULIGNAGES ------------- */
+/* ============= SOULIGNAGES HUG ============= */
+
 /* 1) Les h1/h2 ne prennent que la largeur de leur texte */
-h1,
-h2 {
+.underline-hug {
 	position: relative;
 	display: inline-block; /* clé pour éviter 100% de largeur */
 	font-weight: 800;
@@ -94,19 +94,53 @@ h2 {
 }
 
 /* Si tu veux centrer le titre tout en restant inline-block : */
-h1,
-h2 {
+/* .underline-hug {
 	margin-inline: auto;
-} /* fonctionne si le parent a text-align: center */
-section,
+} */
+
+/* fonctionne si le parent a text-align: center */
+/* .underline-hug section,
 header,
 .container {
 	text-align: center;
-} /* selon ta structure */
+} */
 
 /* 2) Soulignement proportionnel avec segments CMY à la fin */
-h1::after,
-h2::after {
+.underline-hug::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -8px; /* espace sous le texte */
+	width: 100%; /* = largeur du mot seulement grâce à inline-block */
+	height: 4px;
+
+	/* 80% blanc, puis 3 segments de 6.66% chacun (proportionnels) */
+	background: linear-gradient(to right, #eee6dd 0%, #eee6dd 80%, #faff00 80%, /* jaune */ #faff00 86.666%, #ff00a8 86.666%, #ff00a8 93.333%, #00e5ff 93.333%, #00e5ff 100%);
+}
+
+/* ============= SOULIGNAGES FILL ============= */
+
+/* 1) Les h1/h2 ne prennent que la largeur de leur texte */
+.underline-fill {
+	position: relative;
+	font-weight: 800;
+	color: #eee6dd;
+}
+
+/* Si tu veux centrer le titre tout en restant inline-block : */
+.underline {
+	margin-inline: auto;
+}
+
+/* fonctionne si le parent a text-align: center */
+.underline section,
+header,
+.container {
+	text-align: center;
+}
+
+/* 2) Soulignement proportionnel avec segments CMY à la fin */
+.underline-fill::after {
 	content: "";
 	position: absolute;
 	left: 0;

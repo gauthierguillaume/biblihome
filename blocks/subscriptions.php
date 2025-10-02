@@ -1,6 +1,8 @@
 <section class="subscriptions container flex-col ta-center">
-    <h2>ABONNEMENTS</h2>
-    <div class="subscriptions-row flex-row">
+    <a href="/views/catalog.php">
+        <h2 class="underline-hug">ABONNEMENTS</h2>
+    </a>
+    <div class="subscriptions-row flex-row jc-center wrap">
         <a href="#" class="card">
             <div class="card-text decouverte flex-col jc-space-between ai-center">
                 <h3>Abonnement<br>
