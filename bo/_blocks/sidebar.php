@@ -31,8 +31,8 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
         foreach($_SESSION['flash'] as $type => $message){
             ?>
             <div id="zoneDeNotification">
-                <div class="alert alert-<?php echo $type;?>">
-                    <?php echo $message; ?>
+                <div class="alert alert-<?php echo $type;?> flexRow alignCenter JustifyCenter">
+                    <?php if($type = "danger"){ echo '<i class="las la-exclamation-triangle"></i> ';}else if($type = "success"){ echo '<i class="las la-info-circle"></i> ';} echo $message; ?>
                 </div>
             </div>
             <?php
@@ -70,6 +70,12 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
                         </a>
                     </li>
                     <li>
+                        <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/utilisateurs.php?zone=utilisateurs" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "utilisateurs"){ echo "active";}?>">
+                            <span class="las la-user-friends"></span>
+                            <small>Utilisateurs</small>
+                        </a>
+                    </li>
+                    <li>
                        <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/livres.php?zone=livres" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "livres"){ echo "active";}?>">
                             <span class="las la-book"></span>
                             <small>Livres</small>
@@ -84,7 +90,7 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
                     <li>
                         <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/donnees.php?zone=donnees" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "donnees"){ echo "active";}?>">
                             <span class="las la-file-alt"></span>
-                            <small>Donnees</small>
+                            <small>Données</small>
                         </a>
                     </li>
 

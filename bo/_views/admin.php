@@ -28,11 +28,11 @@ include($_SERVER['DOCUMENT_ROOT'].'/host.php');
                 $errors['civilite'] = "Vous devez sélectionner une civilité.";
             }
 
-            if(empty($_POST['user_nom']) || !preg_match('/^[a-zA-Z -]+$/', $_POST['user_nom'])){
+            if(empty($_POST['user_nom']) || !preg_match("/^[\p{L}\p{M} '’-]+$/u", $_POST['user_nom'])){
                 $errors['user_nom'] = 'Le champs "Nom" n\'est pas valide.';
             }
 
-            if(empty($_POST['user_prenom']) || !preg_match('/^[a-zA-Z -]+$/', $_POST['user_prenom'])){
+            if(empty($_POST['user_prenom']) || !preg_match("/^[\p{L}\p{M} '’-]+$/u", $_POST['user_prenom'])){
                 $errors['user_prenom'] = 'Le champs "Prénom" n\'est pas valide.';
             }
 
