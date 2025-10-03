@@ -2,12 +2,10 @@
 @import url("generic.css");
 @import url("components.css");
 
-section .container-login {
+.container-login {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	min-height: 100vh;
-	background: var(--dm_background);
 	/* overflow: hidden; */
 }
 
@@ -376,7 +374,7 @@ form {
 }
 
 .box .validation ul li::before {
-	content: "\f193";
+	content: "\f192";
 	width: 20px;
 	height: 10px;
 	font-family: fontAwesome;

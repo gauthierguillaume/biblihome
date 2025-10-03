@@ -6,11 +6,11 @@ include($_SERVER['DOCUMENT_ROOT'] . '/host.php');
 include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 ?>
 
-	<section class="container-login">
-		<div>
+	<section class="flex-row jc-center">
+		<div class="container-login">
 			<div class="form-box login">
 				<form action="">
-					<h1>Se connecter</h1>
+					<h1 class="underline-hug">Se connecter</h1>
 					<div class="input-box">
 						<input type="text" placeholder="Adresse mail" required />
 						<img src="/assets/fo/img/icons/mail.png" alt="">
@@ -32,7 +32,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 
 			<div class="form-box register">
 				<form action="">
-					<h1>S’enregistrer</h1>
+					<h1 class="underline-hug">S’enregistrer</h1>
 					<div class="input-box">
 						<input type="email" placeholder="Email" required />
                         <img src="/assets/fo/img/icons/mail.png" alt="">
@@ -64,13 +64,13 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 							<input type="submit" id="ok" value="Submit" disabled="disabled" />
 						</div> -->
 					</div>
-					<button type="submit" class="btn-register">Enregistrer</button>
+					<button type="submit" class="btn">Enregistrer</button>
 				</form>
 			</div>
 
 			<div class="toggle-box">
 				<div class="toggle-panel toggle-left">
-					<h2>Vous n’êtes pas inscrit ?</h2>
+					<h2 class="underline-hug">Vous n’êtes pas inscrit ?</h2>
                     <a href="#" class="register-btn btn-sub flex-row ai-center jc-center">
                         <img src="/assets/fo/img/icons/playful button.png" alt="">
                         <p>S'inscrire</p>
@@ -78,7 +78,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
                     <!-- <button class="btn register-btn">S’inscrire</button> -->
 				</div>
 				<div class="toggle-panel toggle-right">
-					<h2>Heureux de vous revoir!</h2>
+					<h2 class="underline-hug">Heureux de vous revoir!</h2>
 					<a class="btn login-btn flex-row ai-center jc-center">
 						<img src="/assets/fo/img/icons/playful button.png" alt="">
 						<p>Connectez-vous</p>
