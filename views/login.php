@@ -71,7 +71,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 			<div class="toggle-box">
 				<div class="toggle-panel toggle-left">
 					<h2 class="underline-hug">Vous n’êtes pas inscrit ?</h2>
-                    <a href="#" class="register-btn btn-sub flex-row ai-center jc-center">
+                    <a href="#" id="register" class="register-btn btn-sub flex-row ai-center jc-center">
                         <img src="/assets/fo/img/icons/playful button.png" alt="">
                         <p>S'inscrire</p>
                     </a>
@@ -79,7 +79,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 				</div>
 				<div class="toggle-panel toggle-right">
 					<h2 class="underline-hug">Heureux de vous revoir!</h2>
-					<a class="btn login-btn flex-row ai-center jc-center">
+					<a href="#" id="login"class="btn login-btn flex-row ai-center jc-center">
 						<img src="/assets/fo/img/icons/playful button.png" alt="">
 						<p>Connectez-vous</p>
 					</a>

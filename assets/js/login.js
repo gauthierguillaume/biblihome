@@ -1,6 +1,6 @@
 const container = document.querySelector(".container-login");
-const registerBtn = document.querySelector(".register-btn");
-const loginBtn = document.querySelector(".login-btn");
+const registerBtn = document.querySelector("#register");
+const loginBtn = document.querySelector("#login");
 
 registerBtn.addEventListener("click", () => {
 	container.classList.add("active");
