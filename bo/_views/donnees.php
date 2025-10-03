@@ -157,7 +157,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
 
         //nubby's percentages factory
         if($cL > 0){
-            $calcLivre = ($sGL / $cL) * 100.0;
+            $calcLivre = ($cGL / $cL) * 100.0;
             $roundedLivre = number_format($calcLivre, 2);
         }else{
             $roundedLivre = 0;
@@ -420,7 +420,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
 
         //nubby's percentages factory
         if($cL > 0){
-            $calcLivre = ($sSL / $cL) * 100.0;
+            $calcLivre = ($cSL / $cL) * 100.0;
             $roundedLivre = number_format($calcLivre, 2);
         }else{
             $roundedLivre = 0;
@@ -679,7 +679,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifGenres"){
 
         //nubby's percentages factory
         if($cL > 0){
-            $calcLivre = ($sLL / $cL) * 100.0;
+            $calcLivre = ($cLL / $cL) * 100.0;
             $roundedLivre = number_format($calcLivre, 2);
         }else{
             $roundedLivre = 0;
