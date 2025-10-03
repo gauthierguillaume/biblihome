@@ -12,8 +12,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
     <div class="cover flex-col ai-center">
         <img src="../assets/fo/img/books/les-deux-tours.jpg" alt="">
         <div class="book-btn flex-row jc-center ai-center">
-            <button class="btn">Emprunter</button>
-            <button class="btn">Favoris</button>
+            <button class="bd-btn">Emprunter</button>
+            <button class="bd-btn">Favoris</button>
         </div>
     </div>
 
@@ -24,17 +24,17 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
             Cette quête terrible est parsemée d'embûches : Gandalf a disparu dans les Mines de la Moria et Boromir a succombé au pouvoir de l'Anneau. Frodo et Sam se sont échappés afin de poursuivre leur voyage jusqu'au coeur du Mordor.<br><br>
             À présent, ils cheminent seuls dans la désolation qui entoure le pays de Sauron - mais c'est sans compter la mystérieuse silhouette qui les suit partout où ils vont. Chef-d'oeuvre de la fantasy, découverte d'un monde imaginaire, de sa géographie, de son histoire et de ses langues, mais aussi réflexion sur le pouvoir et la mort, Le Seigneur des Anneaux est sans équivalent par sa puissance d'évocation, son souffle et son ampleur.</p>
         <div class="book-tags flex-row ai-center wrap">
-            <button class="btn">tag 1</button>
-            <button class="btn">tag 2</button>
-            <button class="btn">tag 3</button>
-            <button class="btn">tag 4</button>
-            <button class="btn">tag 5</button>
-            <button class="btn">tag 6</button>
-            <button class="btn">tag 7</button>
-            <button class="btn">tag 8</button>
-            <button class="btn">tag 9</button>
-            <button class="btn">tag 10</button>
-            <button class="btn">tag 11</button>
+            <button class="bd-btn">tag 1</button>
+            <button class="bd-btn">tag 2</button>
+            <button class="bd-btn">tag 3</button>
+            <button class="bd-btn">tag 4</button>
+            <button class="bd-btn">tag 5</button>
+            <button class="bd-btn">tag 6</button>
+            <button class="bd-btn">tag 7</button>
+            <button class="bd-btn">tag 8</button>
+            <button class="bd-btn">tag 9</button>
+            <button class="bd-btn">tag 10</button>
+            <button class="bd-btn">tag 11</button>
         </div>
         <div class="content-details flex-row">
             <div class="cd-title flex-col">
