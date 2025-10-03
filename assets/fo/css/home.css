@@ -2,7 +2,7 @@
 @import url("generic.css");
 @import url("components.css");
 
-/* ------------- HEADER ------------- */
+/* ============= HEADER ============= */
 
 nav {
 	padding: 1rem 4rem;
@@ -15,20 +15,6 @@ nav .left-side {
 nav img {
 	width: 8rem;
 }
-
-/* nav .searchbar input {
-	width: 20rem;
-	border-radius: 6px;
-	padding: 0.8rem 2rem;
-	background-color: var(--dm_container);
-	outline: none;
-	box-shadow: none;
-	border: none;
-}
-
-nav .searchbar input::placeholder {
-	color: var(--dm_text);
-} */
 
 nav .right-side {
 	gap: 2rem;
@@ -64,7 +50,7 @@ nav a {
 	color: var(--cyan);
 }
 
-/* ------------- HERO ------------- */
+/* ============= HERO ============= */
 
 .hero {
 	padding: 10rem;
@@ -82,26 +68,30 @@ nav a {
 	gap: 1.5rem;
 }
 
-/* ------------- CATALOG ------------- */
+/* ============= CATALOG ============= */
 
-.catalog {
+.catalog-preview {
 	gap: 2rem;
 }
 
-.catalog .books {
+.catalog-preview-row {
 	gap: 2rem;
 }
 
-.catalog .books img {
+.catalog-preview .books {
+	gap: 2rem;
+}
+
+.catalog-preview .books img {
 	border-radius: 12px;
 }
 
-.catalog .books .title {
+.catalog-preview .books .title {
 	font-size: var(--font-book-title);
 	font-weight: bold;
 }
 
-/* ----------- SUBSCRIPTIONS ----------- */
+/* ============= SUBSCRIPTIONS ============= */
 
 .subscriptions {
 	gap: 2rem;
@@ -157,18 +147,17 @@ nav a {
 	width: 1rem;
 }
 
-/* ------------- FAQ ------------- */
+/* ============= FAQ ============= */
 
-.faq {
+.faq-preview {
 	gap: 2rem;
 }
 
-.faqs {
-	padding: 1rem 0;
+.faqs-preview {
 	gap: 0.8rem;
 }
 
-summary {
+.faq-preview summary {
 	background-color: var(--dm_container);
 	padding: 1rem 2rem;
 	border-radius: 12px;
@@ -176,33 +165,33 @@ summary {
 	cursor: pointer;
 }
 
-summary img {
+.faq-preview summary img {
 	width: 1.5rem;
 }
 
-.faq .faqs details p {
+.faq-preview .faqs-preview details p {
 	margin-top: 0.5rem;
 	padding: 0 1rem 0 2rem;
 	text-align: left;
 }
 
-details[open] summary img {
+.faq-preview details[open] summary img {
 	transform: rotate(90deg);
 	transition: transform 0.5s ease;
 }
 
-details[open] summary {
+.faq-preview details[open] summary {
 	background-color: var(--dm_transparency);
 	color: var(--dm_text);
 }
 
-summary:hover {
+.faq-preview summary:hover {
 	background-color: var(--dm_transparency);
 	transition: 0.5s;
 	color: var(--dm_text);
 }
 
-/* ------------- FOOTER ------------- */
+/* ============= FOOTER ============= */
 
 footer {
 	padding: 1rem 4rem;
@@ -260,5 +249,22 @@ footer .socials {
 	color: var(--cyan);
 }
 
-/* ------------- MEDIA QUERIES ------------- */
+/* ============= MEDIA QUERIES ============= */
+/* 
+.desktop {
+	display: flex;
+}
 
+.mobile {
+	display: none;
+}
+
+@media screen and (max-width: 450px) {
+	.desktop {
+		display: none;
+	}
+
+	.mobile {
+		display: flex;
+	}
+} */

@@ -1,0 +1,67 @@
+@import url("base.css");
+@import url("generic.css");
+@import url("components.css");
+
+/* ============= AUTHOR ============= */
+
+.author-detail {
+	gap: 2rem;
+}
+
+.author-detail h2 {
+	font-size: var(--font-title);
+}
+
+.author-detail .cover {
+	width: 32%;
+	border-radius: 12px;
+	gap: 2rem;
+}
+
+.author-detail .cover img {
+	width: 100%;
+	border-radius: 12px;
+}
+
+.author-detail .author {
+	width: 32%;
+	gap: 2rem;
+}
+
+.author-detail .content-details {
+	gap: 4rem;
+}
+
+.author-detail .content-details .cd-title {
+	gap: 1rem;
+	font-weight: bold;
+}
+
+.author-detail .content-details .cd-content {
+	gap: 1rem;
+}
+
+.author-detail .biblio {
+	width: 32%;
+	gap: 2rem;
+}
+
+.author-detail .biblio .books {
+	gap: 2rem;
+}
+
+.author-detail .biblio .books a {
+	width: 29%;
+}
+
+.author-detail .biblio .books img {
+    border-radius: 12px;
+	width: 100%;
+    height: auto;
+}
+
+.author-detail .biblio .books .title {
+	font-size: var(--font-book-title);
+	font-weight: bold;
+}
+

@@ -1,0 +1,87 @@
+@import url("base.css");
+@import url("generic.css");
+@import url("components.css");
+
+/* ============= CATALOG ============= */
+
+.catalog {
+	gap: 5rem;
+}
+
+/* ============= CATALOG FILTERS ============= */
+
+.catalog-filters {
+	background-color: var(--dm_container);
+	padding: 2rem;
+	width: 20%;
+	height: fit-content;
+	border-radius: 12px;
+	gap: 8rem;
+}
+
+form.filters {
+	gap: 1rem;
+}
+
+.filters input {
+	background-color: var(--dm_background);
+	color: var(--dm_text);
+	border: none;
+	border-radius: 8px;
+	padding: 0.5rem;
+	width: 100%;
+}
+
+.filters input::placeholder {
+	color: var(--dm_text);
+	opacity: 0.7;
+}
+
+.filters input:focus {
+	outline: none;
+}
+
+.btns {
+	gap: 1rem;
+}
+
+.btn {
+	background-color: var(--dm_background);
+	color: var(--dm_text);
+	border: none;
+	border-radius: 8px;
+	padding: 0.5rem 1rem;
+	cursor: pointer;
+	width: fit-content;
+	gap: 1rem;
+}
+
+.btn:hover {
+	background-color: var(--dm_transparency);
+	transition: 0.5s;
+}
+
+/* ============= CATALOG CONTENT ============= */
+
+.catalog-pagination {
+	gap: 1rem;
+	margin-right: 5rem;
+}
+
+.catalog-content {
+	gap: 2rem;
+	width: 80%;
+}
+
+.catalog .books {
+	gap: 2rem;
+}
+
+.catalog .books img {
+	border-radius: 12px;
+}
+
+.catalog .books .title {
+	font-size: var(--font-book-title);
+	font-weight: bold;
+}
