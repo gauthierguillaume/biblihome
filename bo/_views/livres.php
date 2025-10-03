@@ -19,89 +19,121 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
 
     // Je sélectionne le livre dans la table à l'aide de l'id récupéré dans le GET.
     $selectLivre = $db->prepare('SELECT * FROM livres
-        NATURAL JOIN livres_auteurs
-        NATURAL JOIN auteurs
-        NATURAL JOIN livres_genres
-        NATURAL JOIN genres
-        NATURAL JOIN livres_series
-        NATURAL JOIN series
-        NATURAL JOIN langues
-        WHERE id_livre = ?
+        LEFT JOIN livres_auteurs ON livres_auteurs.id_livre = livres.id_livre
+        LEFT JOIN auteurs ON livres_auteurs.id_auteur = auteurs.id_auteur
+
+        LEFT JOIN livres_genres ON livres_genres.id_livre = livres.id_livre
+        LEFT JOIN genres ON livres_genres.id_genre = genres.id_genre
+
+        LEFT JOIN livres_series ON livres_series.id_livre = livres.id_livre
+        LEFT JOIN series ON livres_series.id_serie = series.id_serie
+
+        LEFT JOIN langues ON livres.id_langue = langues.id_langue
+        WHERE livres.id_livre = ?
     ');
     $selectLivre->execute([$id]);
+    
+    
     $livre = $selectLivre->fetch(PDO::FETCH_OBJ);
 
+    // auteur
+    $id_auteur = [$livre->id_auteur];
+    $id_auteur_cleaned = implode(',', array_fill(0, count($id_auteur), '?'));
+
+    $selectAuteurs = $db->prepare('SELECT * FROM auteurs
+        WHERE id_auteur NOT IN (?)
+        ');
+    $selectAuteurs->execute([$id_auteur_cleaned]);
+
+    // genre
+    $id_genre = [$livre->id_genre];
+    $id_genre_cleaned = implode(',', array_fill(0, count($id_genre), '?'));
+
+    $selectGenres = $db->prepare('SELECT *FROM genres
+        WHERE id_genre NOT IN (?)
+    ');
+    $selectGenres->execute([$id_genre_cleaned]);
+
+    // serie
+    $id_serie = [$livre->id_serie];
+    $id_serie_cleaned = implode(',', array_fill(0, count($id_serie), '?'));
+
+    $selectSeries = $db->prepare('SELECT * FROM series
+        WHERE id_serie NOT IN (?)
+        ');
+    $selectSeries->execute([$id_serie_cleaned]);
+
+    // langue
     $id_langue = $livre->id_langue;
 
-    $select_genres = $db->prepare('SELECT *FROM genres
-        WHERE id_genre != ?
-    ');
-    $select_genres->execute([$id_genre]);
-
-    $select_auteurs = $db->prepare('SELECT * FROM auteurs');
-    $select_auteurs->execute();
-
-    $selectAuteursLivre = $db->prepare('SELECT * FROM livres_auteurs
-        NATURAL JOIN auteurs
-        WHERE id_livre = ?
-    ');
-    $selectAuteursLivre->execute([$id]);
-
-    if(isset($_POST['addAuteur'])){
-        $id_auteur = $_POST['id_auteur'];
-
-        $insertAuteur = $db->prepare('INSERT INTO livres_auteurs SET
-            id_auteur = ?,
-            id_livre = ?
+    $selectLangues = $db->prepare('SELECT * FROM langues
+        WHERE id_langue != ?
         ');
-        $insertAuteur->execute([$id_auteur, $id]);
+    $selectLangues->execute([$id_langue]);
 
-        echo "<script language='javascript'>
-            document.location.replace('livres.php?zone=livres&action=modifLivre&id=".$id."')
-            </script>";
-    }
+    
 
-    if(isset($_POST['updateLivre'])){
-        $synopsis = $_POST['livre_synopsis'];
 
-        $updateLivre = $db->prepare('UPDATE livres SET
-            livre_synopsis = ?
-            WHERE id_livre = ?    
-        ');
-        $updateLivre->execute([$synopsis, $id]);
 
-        $_SESSION['flash']['success'] = "votre livre a bien été modifié";
 
-        echo "<script language='javascript'>
-            document.location.replace('livres.php?zone=livres')
-            </script>";
-    }  
+
+    // if(isset($_POST['addAuteur'])){
+    //     $id_auteur = $_POST['id_auteur'];
+
+    //     $insertAuteur = $db->prepare('INSERT INTO livres_auteurs SET
+    //         id_auteur = ?,
+    //         id_livre = ?
+    //     ');
+    //     $insertAuteur->execute([$id_auteur, $id]);
+
+    //     echo "<script language='javascript'>
+    //         document.location.replace('livres.php?zone=livres&action=modifLivre&id=".$id."')
+    //         </script>";
+    // }
+
+    // if(isset($_POST['updateLivre'])){
+    //     $synopsis = $_POST['livre_synopsis'];
+
+    //     $updateLivre = $db->prepare('UPDATE livres SET
+    //         livre_synopsis = ?
+    //         WHERE id_livre = ?    
+    //     ');
+    //     $updateLivre->execute([$synopsis, $id]);
+
+    //     $_SESSION['flash']['success'] = "votre livre a bien été modifié";
+
+    //     echo "<script language='javascript'>
+    //         document.location.replace('livres.php?zone=livres')
+    //         </script>";
+    // }  
 
     ?>
 
     <form method="POST">
 
-        <p>Les auteurs sont:</p>
+        <p>Liste des auteurs :</p>
         <?php
-            while($sAL = $selectAuteursLivre->fetch(PDO::FETCH_OBJ)){
-                ?>
-                    <p>- <?php echo $sAL->auteur_prenom;?> <?php echo $sAL->auteur_nom;?></p>
-                <?php
+            if(!empty($livre->id_auteur)){
+                foreach($livre as $auteursLoop){
+                    ?>
+                        <p>- <?php echo $livre->auteur_prenom;?> <?php echo $livre->auteur_nom;?></p><i class="las la-trash-alt"></i>
+                    <?php
+                }
+            }else{
+                echo "<p>Aucun auteur n'est renseigné !</p>";
             }
-        ?>
+            // form ajouter un auteur
+            ?>
+            <form method="POST">
+            <?php
+            
+            
+            ?>
+            </form>
+        
 
         <hr>
 
-        <label for="">Sélectionner le genre</label>
-        <select name="id_genre" id="">
-            <option value="<?php echo $livre->id_genre;?>"><?php echo $livre->genre_nom;?></option>
-            <?php
-            while($sT = $select_genres->fetch(PDO::FETCH_OBJ)){
-                ?>
-                    <option value="<?php echo $sT->id_genre;?>"><?php echo $sT->genre_nom;?></option>
-                <?php
-            }
-            ?>
         </select>
 
         <div>
@@ -116,7 +148,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
 
         <div>
             <label for="">Date d'écriture du livre</label>
-            <input type="date" name="livre_date_create" value="<?php echo $livre->livre_date_create;?>">
+            <input type="date" name="livre_date_publication" value="<?php echo $livre->livre_date_publication;?>">
         </div>
 
         <div>
@@ -151,7 +183,9 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
 
 }else{
 
-    $selectLivres = $db->prepare('SELECT * FROM livres');
+    $selectLivres = $db->prepare('SELECT * FROM livres
+        NATURAL JOIN langues'
+        );
     $selectLivres->execute();
 
     $selectGenres = $db->prepare('SELECT * FROM genres');
@@ -178,8 +212,8 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
         $genre = $_POST['id_genre'];
         $serie = $_POST['id_serie'];
         $synopsis = $_POST['livre_synopsis']; //this input isn't sanitized cuz it receives html info. it SHOULD however, in practice, be ran through some kind of "remove all the disallowed html tags server side too" script if we were to do this proper
-        $editeur = htmlspecialchars($_POST['livre_edition']);
-        $date = $_POST['livre_date_create'];
+        $editeur = htmlspecialchars($_POST['livre_editeur']);
+        $date = $_POST['livre_date_publication'];
 
         //if i don't do an empty check it throws an error ig :V
         if(!empty($FILES_['livre_couverture'])){
@@ -281,38 +315,58 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
             //date
             if(!empty($date)){
                 $insertDate = $db->prepare("UPDATE livres SET
-                livre_date = ?
+                livre_date_publication = ?
                 WHERE id_livre = ?
                 ");
                 $insertDate->execute([$date, $newId]);
             }
 
-            echo "<script language='javascript'>
-                document.location.replace('livres.php?zone=livres&action=modifLivre&id=$newId')
-                </script>";
+            // echo "<script language='javascript'>
+            //     document.location.replace('livres.php?zone=livres&action=modifLivre&id=$newId')
+            //     </script>";
 
         }else{
             $_SESSION['flash']['danger'] = "Vous n'avez pas renseigné tout les champs obligatoires";
 
             //making it so if they forgot to fill something the user keeps non-dropdown data so they won't want to commit die(); because they just lost 30 lines of synopsis           
-            $_SESSION['old']['livre_titre'] = $titre;
-            $_SESSION['old']['livre_isnb'] = $isbn;
-            $_SESSION['old']['livre_edition'] = $editeur;
-            $_SESSION['old']['livre_synopsis'] = $synopsis;
+            unset($_SESSION['old']);
+            //it already should be unset, but you know what they say. don't trust any code, not even your own code
+            $_SESSION['old'] = [
+                'livre_titre' => $titre,
+                'livre_isbn' => $isbn,
+                'livre_editeur' => $editeur,
+                'livre_synopsis' => $synopsis,
+            ];
+            //fuck yeah associative arrays
 
-            // echo "<script language='javascript'>
-            // document.location.replace('livres.php?zone=livres')
-            // </script>"; 
+            echo "<script language='javascript'>
+            document.location.replace('livres.php?zone=livres')
+            </script>"; 
         }
     }
 
     //pushing the fail's data in & emptying the variable
     if(!empty($_SESSION['old'])){
-    $titre = $_SESSION['old']['livre_titre'];
-    $isbn = $_SESSION['old']['livre_isnb'];
-    $editeur = $_SESSION['old']['livre_edition'];
-    $synopsis = $_SESSION['old']['livre_synopsis'];
-    unset($_SESSION['old']);
+        
+        $old = $_SESSION['old'];
+
+        if(!empty($old['livre_titre'])){
+            $old_titre = $old['livre_titre'];
+        }
+
+        if(!empty($old['livre_isnb'])){
+            $old_isbn = $old['livre_isbn'];
+        }
+        
+        if(!empty($old['livre_editeur'])){
+            $old_editeur = $old['livre_editeur'];
+        }
+        
+        if(!empty($old['livre_synopsis'])){
+            $old_synopsis = $old['livre_synopsis'];
+        }
+
+        unset($_SESSION['old']);
     }
     ?>
 
@@ -320,12 +374,12 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
 
         <div>
             <label for="">Nom (obligatoire)</label>
-            <input type="text" name="livre_titre" value="<?php if(!empty($titre)){echo $titre ;}?>">
+            <input type="text" name="livre_titre" value="<?php if(!empty($old_titre)){echo $old_titre ;}?>">
         </div>
 
         <div>
-            <label for="">isbn (obligatoire)</label>
-            <input type="text" name="livre_isnb" value="">
+            <label for="">ISBN (obligatoire)</label>
+            <input type="text" name="livre_isnb" value="<?php if(!empty($old_isbn)){echo $old_isbn ;}?>">
         </div>
                 
         <div>
@@ -389,17 +443,17 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
 
         <div>
             <label for="">Editeur</label>
-            <input type="text" name="livre_edition">
+            <input type="text" name="livre_editeur" value="<?php if(!empty($old_editeur)){echo $old_editeur ;}?>">
         </div>
 
         <div>
             <label for="">Synopsis</label>
-            <textarea name="livre_synopsis" id="" placeholder="Ecrire le synopsis ici"></textarea>
+            <textarea name="livre_synopsis" id="" placeholder="Ecrire le synopsis ici"><?php if(!empty($old_synopsis)){echo $old_synopsis ;}?></textarea>
         </div>
 
         <div>
             <label for="">Date de publication</label>
-            <input type="date" name="livre_date_create">
+            <input type="date" name="livre_date_publication">
         </div>
 
         <div>
@@ -418,6 +472,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
                         <th><span class="las la-sort"></span> TITRE</th>
                         <th><span class="las la-sort"></span> ISBN</th>
                         <th><span class="las la-sort"></span> LANGUE</th>
+                        <th><span class="las la-sort"></span> AUTEUR</th>
                         <th><span class="las la-sort"></span> GENRE</th>
                         <th><span class="las la-sort"></span> SERIE</th>
                         <th><span class="las la-sort"></span> SYNOPSIS</th>
@@ -429,34 +484,94 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
                 <tbody>
                     <?php
                         while($sL = $selectLivres->fetch(PDO::FETCH_OBJ)){
+                            
+                            $id = $sL->id_livre;
+
+                            $selectLivresGenres = $db->prepare('SELECT * FROM livres_genres
+                            NATURAL JOIN genres
+                            WHERE id_livre = ?');
+                            $selectLivresGenres->execute([$id]);
+
+                            $selectLivresAuteurs = $db->prepare('SELECT * FROM livres_auteurs
+                            NATURAL JOIN auteurs
+                            WHERE id_livre = ?');
+                            $selectLivresAuteurs->execute([$id]);
+
+                            $selectLivresSeries = $db->prepare('SELECT * FROM livres_series
+                            NATURAL JOIN series
+                            WHERE id_livre = ?');
+                            $selectLivresSeries->execute([$id]);
+
+                            $selectExemplaires = $db->prepare('SELECT * FROM exemplaires
+                            WHERE id_livre = ?');
+                            $selectExemplaires->execute([$id]);
+                            $sE = count($selectExemplaires->fetchAll());
+
+                            //this is really just so it's easier to see empty synopsis lol
+                            $synopsis_short = $sL->livre_synopsis;
+                            if(!empty($synopsis_short)){
+                                $short = mb_substr($synopsis_short, 0, 15, 'UTF-8');
+                                //using mb for accents bc "just" substr can yeet them
+                                if (mb_strlen($synopsis_short, 'UTF-8') > 14) {
+                                    $short .= '…';
+                                }
+                                //adds ... only if it hits the limit
+                            }
                             ?>
                             <tr>
-                                <td>#<?php echo $sL->id_livre;?></td>
+                                <td>#<?php echo $id;?></td>
+                                <!-- titre & couverture -->
                                 <td>
                                     <div class="client">
-                                        <div class="client-img bg-img" style="background-image: url(img/3.jpeg)"></div>
+                                        <div class="client-img bg-img" style="background-image: url(img/<?php $livre_couverture; ?>)"></div>
                                         <div class="client-info">
                                             <h4><?php echo $sL->livre_titre;?></h4>
+                                            <small><?php echo $sE; ?> exemplaire<?php if($sE != 1){echo "s";} ?></small>
                                         </div>
                                     </div>
                                 </td>
 
+                                <!-- isbn -->
                                 <td>
-                                    auteur
+                                    <?php echo $sL->livre_isbn;?>
                                 </td>
 
+                                <!-- langue -->
                                 <td>
-                                    genre
+                                    <?php echo $sL->langue_nom;?>
                                 </td>
 
+                                <!-- auteur -->
                                 <td>
-                                    genre
+                                    <?php while($sLA = $selectLivresAuteurs->fetch(PDO::FETCH_OBJ)){ echo '<div>'.$sLA->auteur_prenom.' '.$sLA->auteur_nom.'</div>'; } ?>
                                 </td>
 
+                                <!-- genre -->
                                 <td>
-                                    <?php echo $sL->livre_date_create;?>
+                                    <?php while($sLG = $selectLivresGenres->fetch(PDO::FETCH_OBJ)){ echo '<div>'.$sLG->genre_tag.'</div>'; } ?>
                                 </td>
 
+                                <!-- serie -->
+                                <td>
+                                    <?php while($sLS = $selectLivresSeries->fetch(PDO::FETCH_OBJ)){ echo '<div>'.$sLS->serie_nom.'</div>'; } ?>
+                                </td>
+
+                                <!-- synopsis -->
+                                <td>
+                                    <?php if(!empty($short)){echo $short ;}?>
+                                </td>
+
+                                <!-- editeur -->
+                                <td>
+                                    <?php echo $sL->livre_editeur;?>
+                                </td>
+
+                                <!-- publication -->
+                                <td>
+                                    <?php echo $sL->livre_date_publication;?>
+                                </td>
+
+                                <!-- actions -->
                                 <td>
                                     <div class="actions">
                                         <span class="lab la-telegram-plane"></span>
