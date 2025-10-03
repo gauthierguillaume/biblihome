@@ -8,8 +8,8 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 
 	<section class="flex-row jc-center">
 		<div class="container-login">
-			<div class="form-box login">
-				<form action="">
+			<div class="form-classbox login">
+				<form class="form-login" action="">
 					<h1 class="underline-hug">Se connecter</h1>
 					<div class="input-box">
 						<input type="text" placeholder="Adresse mail" required />
@@ -27,11 +27,11 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
                         <img src="/assets/fo/img/icons/playful button.png" alt="">
                         <p>Connexion</p>
                     </a>
-				</form>
+				</form>class
 			</div>
 
-			<div class="form-box register">
-				<form action="">
+			<div class="form-classbox register">
+				<form class="form-login" action="">
 					<h1 class="underline-hug">S’enregistrer</h1>
 					<div class="input-box">
 						<input type="email" placeholder="Email" required />
@@ -65,7 +65,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 						</div> -->
 					</div>
 					<button type="submit" class="btn">Enregistrer</button>
-				</form>
+				</form>class
 			</div>
 
 			<div class="toggle-box">
