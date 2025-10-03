@@ -1,0 +1,103 @@
+@import url("base.css");
+@import url("generic.css");
+@import url("components.css");
+
+/* ============= BOOK ============= */
+
+.book-detail {
+	gap: 2rem;
+}
+
+.book-detail h2 {
+	font-size: var(--font-title);
+}
+
+.book-detail h3 {
+	font-size: var(--font-subtitle);
+}
+
+.book-detail .cover {
+	width: 32%;
+	border-radius: 12px;
+	gap: 2rem;
+}
+
+.book-detail .cover img {
+	width: 100%;
+	border-radius: 12px;
+}
+
+.book-btn {
+	gap: 1rem;
+	width: 100%;
+}
+
+.book-detail .cover button {
+	background-color: var(--dm_container);
+	color: var(--dm_text);
+	border: none;
+	border-radius: 8px;
+	padding: 0.5rem 1rem;
+	cursor: pointer;
+	gap: 1rem;
+	transition: 0.5s;
+}
+
+.book-detail .cover button:hover {
+	background-color: var(--dm_transparency);
+}
+
+.book-detail .content {
+	width: 32%;
+	gap: 2rem;
+}
+
+.book-detail .book-tags {
+	gap: 1rem;
+	width: 100%;
+}
+
+.book-detail .book-tags button {
+	background-color: var(--dm_container);
+	color: var(--dm_text);
+	border: none;
+	border-radius: 8px;
+	padding: 0.5rem 1rem;
+	cursor: pointer;
+	gap: 1rem;
+	transition: 0.5s;
+}
+
+.book-detail .book-tags button:hover {
+	background-color: var(--dm_transparency);
+}
+
+.book-detail .content-details {
+	gap: 4rem;
+}
+
+.book-detail .content-details .cd-title {
+	gap: 1rem;
+	font-weight: bold;
+}
+
+.book-detail .content-details .cd-content {
+	gap: 1rem;
+}
+
+.book-detail .author {
+	width: 32%;
+	gap: 2rem;
+}
+
+.book-detail .author-header {
+	gap: 2rem;
+}
+
+
+.book-detail .author-header img {
+	border-radius: 50%;
+	width: 10rem;
+	height: 10rem;
+	object-fit: cover;
+}

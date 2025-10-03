@@ -533,12 +533,130 @@ table tbody tr {
     overflow-x: auto;
 }
 
-/* ---------------------- */
+/* donnees */
+
+.recordsContainer{
+    width: 100%;
+    overflow-x: auto;
+    padding-left: 10px;
+}
+
+.tableAction{
+    min-width: 150px;
+    text-align: right;
+}
+
+th.tableAction{
+    padding-right: 20px;
+}
+
+.idPadding{
+    min-width: 40px;
+}
 
 .donnees{
     width: 32%;
+    min-width: 300px;
     gap: 20px;
+    margin-right:10px;
+    margin-top:10px;
 }
+
+.label-hover:hover{
+    color: var(--main-color);
+}
+
+ul.fiche{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+ul.fiche li span.liTitle, .donnees form label, form.addSpecific label{
+    color: var(--color-dark);
+    font-weight: 600;
+}
+
+ul.fiche li i.liPercent{
+    color:var(--text-grey);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+#checkbox-hide-genre, #checkbox-hide-serie, #checkbox-hide-langue, #form-genre-name, #form-serie-name, #form-langue-name, #deleteWarning, #transferWarning{
+    display: none;
+}
+
+#form-genre-name.active, #form-serie-name.active, #form-langue-name.active{
+    display: block;
+}
+
+.formTransfer{
+    margin-bottom: 5px;
+}
+
+.formTransfer select, .donnees form input, form.addSpecific input{
+    margin-top: 10px;
+    height: 37px;
+    border-radius: 4px;
+    padding: 0rem 1rem;
+    font-weight: 600;
+    border: solid 2px var(--text-grey);
+}
+
+form.addSpecific{
+    margin-bottom: 20px;
+}
+
+ form.addSpecific input{
+    max-width: 250px;
+ }
+
+#openTransferWarning, #openDeleteWarning{
+    background: #992222;
+    color: #fff;
+    height: 37px;
+    border-radius: 4px;
+    padding: 0rem 1rem;
+    border: none;
+    font-weight: 600;
+}
+
+#openDeleteWarning.disabled{
+    background: #999999;
+}
+
+#deleteWarning.active, #transferWarning.active{
+    display: flex;
+}
+
+#deleteWarning, #transferWarning{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 30px 15px 30px;
+    gap: 8px;
+    background-color: #DDAAAA;
+    color: #992222;
+    border-radius: 15px;
+    border: 2px solid #992222;
+    text-align: center;
+}
+
+#deleteWarning .buttonsWarning, #transferWarning .buttonsWarning{
+    gap: 10px;
+    margin-top: 5px;
+}
+
+#deleteWarning .buttonsWarning button, #deleteWarning .buttonsWarning input, 
+#transferWarning .buttonsWarning button,  #transferWarning .buttonsWarning input{
+    padding: 8px 12px;
+    background-color: #992222;
+    color:white;
+    border-radius: 10px;
+    border: solid 2px white;
+}
+
 
 @media only screen and (max-width: 1200px) {
     .analytics {
