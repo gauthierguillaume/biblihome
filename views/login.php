@@ -64,7 +64,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 							<input type="submit" id="ok" value="Submit" disabled="disabled" />
 						</div> -->
 					</div>
-					<button type="submit" class="btn">Enregistrer</button>
+					<button type="submit" class="btn-register">Enregistrer</button>
 				</form>
 			</div>
 

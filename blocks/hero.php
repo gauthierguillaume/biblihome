@@ -5,7 +5,7 @@
         <p>Que vous soyez étudiant pressé, retraité passionné ou en situation de mobilité réduite, nos livres viennent à vous.</p>
         <h2 class="underline-hug">Prêts à libérer votre imagination ?</h2>
         <p>Identifiez-vous pour commencer l’aventure.</p>
-        <a id="identify-button" class="flex-row" href="/login.php">
+        <a id="identify-button" class="flex-row" href="/views/login.php">
             <img src="../assets/fo/img/icons/login.png" alt="S'identifier"> S'identifier
         </a>
     </div>

@@ -62,7 +62,7 @@
                 <a id="accueil" href="/index.php">Accueil</a>
                 <a id="catalogue" href="/views/catalog.php">Catalogue</a>
                 <?php if (!$user): ?>
-                    <a id="identify-button" class="flex-row" href="/login.php">
+                    <a id="identify-button" class="flex-row" href="/views/login.php">
                         <img src="../assets/fo/img/icons/login.png" alt="S'identifier"> S'identifier
                     </a>
                 <?php

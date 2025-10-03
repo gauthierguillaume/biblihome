@@ -2,13 +2,6 @@
 @import url("generic.css");
 @import url("components.css");
 
-/* ------------- RESET ------------- */
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
 section .container-login {
 	display: flex;
 	justify-content: center;
