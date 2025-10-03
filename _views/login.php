@@ -1,25 +1,13 @@
-<!DOCTYPE html>
-<html lang="fr">
+<?php
+include($_SERVER['DOCUMENT_ROOT'] . '/host.php');
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Responsive Login and Registration Form in HTML CSS & Javascript</title>
-    <meta name="description" content="BibliHome - Une bibliothèque accessible à tous">
-    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/fo/css/base.css">
-    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/fo/css/generic.css">
-    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/fo/css/components.css">
-    <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/fo/css/login.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" />
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+//  ================== HEADER ================== 
 
+include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
+?>
 
-</head>
-
-<body>
-		<div class="container-login">
+	<section class="container-login">
+		<div>
 			<div class="form-box login">
 				<form action="">
 					<h1>Se connecter</h1>
@@ -98,7 +86,13 @@
 				</div>
 			</div>
 		</div>
+	</section>
 
-		<script src="/assets/js/login.js"></script>
-	</body>
-</html>
+	<script src="/assets/js/login.js"></script>
+		
+	<!-- ================== FOOTER ==================  -->
+<?php
+include($_SERVER['DOCUMENT_ROOT'] . '/blocks/footer.php');
+?>
+
+		

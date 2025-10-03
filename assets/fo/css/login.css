@@ -9,7 +9,7 @@
 	box-sizing: border-box;
 }
 
-body {
+section .container-login {
 	display: flex;
 	justify-content: center;
 	align-items: center;
