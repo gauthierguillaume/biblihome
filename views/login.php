@@ -52,12 +52,12 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 
 						<div class="validation">
 							<ul>
-								<li id="lower">At least one lowercase letter</li>
-								<li id="upper">At least one uppercase letter</li>
-								<li id="number">At least one number</li>
-								<li id="special">At least one special character</li>
-								<li id="length">At least 8 characters</li>
-								<li id="match">Same Password</li>
+								<li id="lower">Au moins une lettre minuscule</li>
+								<li id="upper">Au moins une lettre majuscule</li>
+								<li id="number">Au moins un chiffre</li>
+								<li id="special">Au moins un caractère spécial</li>
+								<li id="length">Au moins 8 caractères</li>
+								<li id="match">Mêmes mots de passe</li>
 							</ul>
 						</div>
 						<!-- <div class="sanction">
