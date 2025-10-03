@@ -19,13 +19,13 @@
 	overflow: hidden;
 }
 
-.container-login::before{
+.container-login::before {
 	content: "";
 	position: absolute;
 	inset: 0;
 	background-image: url(/assets/fo/img/CMY.png);
 	filter: blur(8px);
-	z-index: -2; 
+	z-index: -2;
 }
 
 .container-login::after {
@@ -35,7 +35,6 @@
 	background: rgba(0, 0, 0, 0.4); /* noir semi-transparent */
 	z-index: -1; /* au-dessus de l’image mais sous le contenu */
 }
-
 
 .form-box {
 	position: absolute;
@@ -53,6 +52,10 @@
 
 .container-login.active .form-box {
 	right: 50%;
+}
+
+.container-login.active .form-box h1::after {
+	display: none;
 }
 
 .form-box.register {
@@ -113,12 +116,12 @@
 	text-decoration: none;
 }
 
-.forgot-link img{
+.forgot-link img {
 	margin: -9px;
 	margin-left: 8px;
 }
 
-.container-login .form-box .btn-connex{
+.container-login .form-box .btn-connex {
 	gap: 1rem;
 	background: var(--dm_background);
 	border-radius: 10px;
@@ -211,12 +214,12 @@
 	transition-delay: 1.2s;
 }
 
-.toggle-panel.toggle-left h2{
+.toggle-panel.toggle-left h2 {
 	margin-bottom: 3rem;
 	color: var(--dm_text);
 }
 
-.toggle-panel.toggle-left .btn-sub{
+.toggle-panel.toggle-left .btn-sub {
 	gap: 1rem;
 	background: var(--dm_background);
 	border-radius: 10px;
@@ -233,7 +236,7 @@
 	transition-delay: 0.6s;
 }
 
-.toggle-panel.toggle-right .login-btn{
+.toggle-panel.toggle-right .login-btn {
 	width: auto;
 	gap: 1rem;
 	background: var(--dm_background);
@@ -346,7 +349,6 @@
 	content: "\f070";
 }*/
 
-
 .box .validation {
 	background-color: var(--dm_container);
 	padding: 10%;
@@ -388,7 +390,7 @@
 
 .box .sanction input {
 	width: 100%;
-	background-color: #7494EC;
+	background-color: #7494ec;
 	color: white;
 	border: none;
 	outline: none;
@@ -399,6 +401,6 @@
 }
 
 .box .sanction input:disabled {
-	background-color: #7494EC;
+	background-color: #7494ec;
 	color: white;
 }

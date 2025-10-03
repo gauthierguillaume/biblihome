@@ -8,7 +8,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 
 	<section class="flex-row jc-center">
 		<div class="container-login">
-			<div class="form-classbox login">
+			<div class="form-box login">
 				<form class="form-login" action="">
 					<h1 class="underline-hug">Se connecter</h1>
 					<div class="input-box">
@@ -20,17 +20,17 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 						<img src="/assets/fo/img/icons/open eye magenta.png" alt="icone enveloppe">
 					</div>
 					<div class="forgot-link">
-						<a href="#" class="login-Btn">Mot de passe oublié ?</a>
+						<a href="#" class="login-btn">Mot de passe oublié ?</a>
                         <img src="/assets/fo/img/icons/playful PW.png" alt="icone oeil">
 					</div>
 					<a href="#" class="btn btn-connex flex-row ai-center jc-center">
                         <img src="/assets/fo/img/icons/playful button.png" alt="">
                         <p>Connexion</p>
                     </a>
-				</form>class
+				</form>
 			</div>
 
-			<div class="form-classbox register">
+			<div class="form-box register">
 				<form class="form-login" action="">
 					<h1 class="underline-hug">S’enregistrer</h1>
 					<div class="input-box">
@@ -65,7 +65,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 						</div> -->
 					</div>
 					<button type="submit" class="btn">Enregistrer</button>
-				</form>class
+				</form>
 			</div>
 
 			<div class="toggle-box">
