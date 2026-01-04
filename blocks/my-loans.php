@@ -14,7 +14,7 @@
         <details>
             <summary class="flex-row jc-space-between ai-center">
                 <img src="../assets/fo/img/books/le-silmarillion.png" alt="">
-                <p>Le silmarillionfgfdgdfgdgdfgdfgdfgdfgdgdgf</p>
+                <p>Le silmarillion</p>
                 <p>J.R.R. Tolkien</p>
                 <div class="book-shipping">
                     <p>Livré</p>

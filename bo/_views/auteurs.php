@@ -1,16 +1,16 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT'].'/host.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/host.php');
 
-include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/sidebar.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/bo/_blocks/sidebar.php');
 
-include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/header.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/bo/_blocks/header.php');
 
 $domaine = "Dashboard";
 $sousDomaine = "Auteurs / Liste";
 
-include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/ariane.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/bo/_blocks/ariane.php');
 
-if(isset($_GET['action']) && $_GET['action'] == "modifAuteur"){
+if (isset($_GET['action']) && $_GET['action'] == "modifAuteur") {
     // Je récupère l'id dans le GET pour savoir de quel auteur je parle
     $id = $_GET['id'];
 
@@ -21,7 +21,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifAuteur"){
     $selectAuteur->execute([$id]);
     $auteur = $selectAuteur->fetch(PDO::FETCH_OBJ);
 
-    if(isset($_POST['update_auteur'])){
+    if (isset($_POST['update_auteur'])) {
         $nom = htmlspecialchars($_POST['auteur_nom']);
         $prenom = htmlspecialchars($_POST['auteur_prenom']);
         $date = $_POST['auteur_date_naissance'];
@@ -43,33 +43,33 @@ if(isset($_GET['action']) && $_GET['action'] == "modifAuteur"){
             </script>";
     }
 
-    ?>
+?>
 
     <form method="POST">
 
         <div>
             <label for="">Nom de l'auteur</label>
-            <input type="text" name="auteur_nom" value="<?php echo $auteur->auteur_nom;?>">
+            <input type="text" name="auteur_nom" value="<?php echo $auteur->auteur_nom; ?>">
         </div>
 
         <div>
             <label for="">Prénom de l'auteur</label>
-            <input type="text" name="auteur_prenom" value="<?php echo $auteur->auteur_prenom;?>">
+            <input type="text" name="auteur_prenom" value="<?php echo $auteur->auteur_prenom; ?>">
         </div>
 
         <div>
             <label for="">Date de naissance de l'auteur</label>
-            <input type="date" name="auteur_date_naissance" value="<?php echo $auteur->auteur_date_naissance;?>">
+            <input type="date" name="auteur_date_naissance" value="<?php echo $auteur->auteur_date_naissance; ?>">
         </div>
 
         <div>
             <label for="">Nombre d'ouvrage de l'auteur</label>
-            <input type="num" name="auteur_nbre_ouvrage" value="<?php echo $auteur->auteur_nbre_ouvrage;?>">
+            <input type="num" name="auteur_nbre_ouvrage" value="<?php echo $auteur->auteur_nbre_ouvrage; ?>">
         </div>
 
         <div>
             <label for="">Bio de l'auteur</label>
-            <textarea name="auteur_bio" id="" placeholder="Bio de l'auteur"><?php echo $auteur->auteur_bio;?></textarea>
+            <textarea name="auteur_bio" id="" placeholder="Bio de l'auteur"><?php echo $auteur->auteur_bio; ?></textarea>
         </div>
 
         <div>
@@ -80,14 +80,14 @@ if(isset($_GET['action']) && $_GET['action'] == "modifAuteur"){
 
 
 
-    <?php
+<?php
 
-}else{
+} else {
 
     $selectAuteurs = $db->prepare('SELECT * FROM auteurs');
     $selectAuteurs->execute();
 
-    if(isset($_POST['add_auteur'])){
+    if (isset($_POST['add_auteur'])) {
         $prenom = htmlspecialchars($_POST['auteur_prenom']);
         $nom = htmlspecialchars($_POST['auteur_nom']);
         $date = $_POST['auteur_date_naissance'];
@@ -98,7 +98,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifAuteur"){
             auteur_prenom = ?,
             auteur_nom = ?,
             auteur_date_naissance = ?,
-            auteur_bio = ?,
+            auteur_biographie = ?,
             auteur_nbre_ouvrage = ?
         ');
         $add_auteur->execute([$prenom, $nom, $date, $bio, $num]);
@@ -108,7 +108,7 @@ if(isset($_GET['action']) && $_GET['action'] == "modifAuteur"){
             </script>";
     }
 
-    ?>
+?>
 
     <form method="POST">
 
@@ -175,52 +175,52 @@ if(isset($_GET['action']) && $_GET['action'] == "modifAuteur"){
                 </thead>
                 <tbody>
                     <?php
-                        while($sA = $selectAuteurs->fetch(PDO::FETCH_OBJ)){
-                            ?>
-                            <tr>
-                                <td>#<?php echo $sA->id_auteur;?></td>
-                                <td>
-                                    <div class="client">
-                                        <div class="client-img bg-img" style="background-image: url(img/3.jpeg)"></div>
-                                        <div class="client-info">
-                                            <h4><?php echo $sA->auteur_prenom;?> <?php echo $sA->auteur_nom;?></h4>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <?php echo $sA->auteur_date_naissance;?>
-                                </td>
-
-                                <td>
-                                    <?php echo $sA->auteur_nbre_ouvrage;?>
-                                </td>
-
-                                <td>
-                                    <div class="actions">
-                                        <span class="lab la-telegram-plane"></span>
-                                        <a href="auteurs.php?zone=auteurs&action=modifAuteur&id=<?php echo $sA->id_auteur;?>">
-                                            <span class="las la-eye"></span>
-                                        </a>
-                                        <span class="las la-ellipsis-v"></span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php
-                        }
+                    while ($sA = $selectAuteurs->fetch(PDO::FETCH_OBJ)) {
                     ?>
-                    
-                    
+                        <tr>
+                            <td>#<?php echo $sA->id_auteur; ?></td>
+                            <td>
+                                <div class="client">
+                                    <div class="client-img bg-img" style="background-image: url(img/3.jpeg)"></div>
+                                    <div class="client-info">
+                                        <h4><?php echo $sA->auteur_prenom; ?> <?php echo $sA->auteur_nom; ?></h4>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <?php echo $sA->auteur_date_naissance; ?>
+                            </td>
+
+                            <td>
+                                <?php echo $sA->auteur_nbre_ouvrage; ?>
+                            </td>
+
+                            <td>
+                                <div class="actions">
+                                    <span class="lab la-telegram-plane"></span>
+                                    <a href="auteurs.php?zone=auteurs&action=modifAuteur&id=<?php echo $sA->id_auteur; ?>">
+                                        <span class="las la-eye"></span>
+                                    </a>
+                                    <span class="las la-ellipsis-v"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+
+
                 </tbody>
             </table>
         </div>
 
     </div>
 
-    <?php
+<?php
 
 }
 
-include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/footer.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/bo/_blocks/footer.php');
 
 ?>

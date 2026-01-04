@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/fo/css/book-detail.css">
     <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/fo/css/author-detail.css">
     <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT'] ?>/assets/fo/css/login.css">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" />
@@ -27,7 +27,6 @@
     <header>
 
         <?php
-        session_start();
         $user = $_SESSION['user'] ?? null;
 
         function bh_initials(string $first, string $last): string
@@ -37,6 +36,7 @@
             return $i1 . $i2;
         }
         ?>
+
         <!-- ------------- NAVBAR ------------- -->
         <nav class="flex-row jc-space-between ai-center wrap desktop">
             <div class="left-side flex-row jc-space-between ai-center">
