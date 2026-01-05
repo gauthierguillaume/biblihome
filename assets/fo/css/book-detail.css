@@ -25,6 +25,8 @@
 .book-detail .cover img {
 	width: 100%;
 	border-radius: 12px;
+	max-height: 75vh;
+	object-fit: contain;
 }
 
 .book-btn {
@@ -93,7 +95,6 @@
 .book-detail .author-header {
 	gap: 2rem;
 }
-
 
 .book-detail .author-header img {
 	border-radius: 50%;

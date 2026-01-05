@@ -2,15 +2,124 @@
 include($_SERVER['DOCUMENT_ROOT'] . '/host.php');
 
 // ================== HEADER ==================
-
 include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
+
+// ================== ID livre ==================
+$id = (int)($_GET['id'] ?? 0);
+if ($id <= 0) {
+    // si pas d'id => retour catalogue
+    header("Location: /views/catalog.php");
+    exit;
+}
+
+// petit helper: récupérer une colonne possible dans un row (si elle existe)
+function pickField(array $row, array $keys, $default = '')
+{
+    foreach ($keys as $k) {
+        if (array_key_exists($k, $row) && $row[$k] !== null && $row[$k] !== '') {
+            return $row[$k];
+        }
+    }
+    return $default;
+}
+
+// ================== Livre ==================
+$selectLivre = $db->prepare("
+    SELECT livres.*, langues.langue_nom
+    FROM livres
+    LEFT JOIN langues ON livres.id_langue = langues.id_langue
+    WHERE livres.id_livre = ?
+    LIMIT 1
+");
+$selectLivre->execute([$id]);
+$livre = $selectLivre->fetch(PDO::FETCH_ASSOC);
+
+if (!$livre) {
+    header("Location: /views/catalog.php");
+    exit;
+}
+
+// ================== Genres (tags) ==================
+$selectGenres = $db->prepare("
+    SELECT genres.*
+    FROM livres_genres
+    NATURAL JOIN genres
+    WHERE id_livre = ?
+");
+$selectGenres->execute([$id]);
+$genres = $selectGenres->fetchAll(PDO::FETCH_ASSOC);
+
+// ================== Série ==================
+$selectSeries = $db->prepare("
+    SELECT series.*
+    FROM livres_series
+    NATURAL JOIN series
+    WHERE id_livre = ?
+");
+$selectSeries->execute([$id]);
+$series = $selectSeries->fetchAll(PDO::FETCH_ASSOC); // parfois plusieurs, on affichera la première
+
+// ================== Auteurs ==================
+$selectAuteurs = $db->prepare("
+    SELECT auteurs.*
+    FROM livres_auteurs
+    NATURAL JOIN auteurs
+    WHERE id_livre = ?
+");
+$selectAuteurs->execute([$id]);
+$auteurs = $selectAuteurs->fetchAll(PDO::FETCH_ASSOC);
+
+// auteur principal pour l’affichage (si plusieurs, on prend le 1er)
+$auteurMain = $auteurs[0] ?? null;
+
+// ================== Vars affichage ==================
+$titre = $livre['livre_titre'] ?? 'Titre';
+$isbn  = $livre['livre_isbn'] ?? '';
+$editeur = $livre['livre_editeur'] ?? '';
+$langue = $livre['langue_nom'] ?? '';
+$synopsis = $livre['livre_synopsis'] ?? '';
+
+$datePubRaw = $livre['livre_date_publication'] ?? '';
+$datePub = $datePubRaw;
+if (!empty($datePubRaw) && $datePubRaw !== '0000-00-00') {
+    $ts = strtotime($datePubRaw);
+    if ($ts) {
+        // format FR simple
+        $datePub = date('d/m/Y', $ts);
+    }
+}
+
+$serieNom = $series[0]['serie_nom'] ?? '';
+
+$auteurNom = 'Auteur inconnu';
+$auteurId = 0;
+if ($auteurMain) {
+    $auteurNom = trim(($auteurMain['auteur_prenom'] ?? '') . ' ' . ($auteurMain['auteur_nom'] ?? ''));
+    $auteurId = (int)($auteurMain['id_auteur'] ?? 0);
+}
+
+// cover
+$coverFile = !empty($livre['livre_couverture']) ? $livre['livre_couverture'] : '1.jpeg';
+$coverSrc = "/assets/bo/img/" . $coverFile;
+
+// photo auteur (on tente plusieurs noms possibles, sinon on garde ton image existante)
+$auteurPhoto = $auteurMain ? pickField($auteurMain, ['auteur_photo', 'auteur_image', 'photo', 'image'], '') : '';
+$auteurPhotoSrc = !empty($auteurPhoto) ? ("/assets/bo/img/" . $auteurPhoto) : "../assets/fo/img/books/tolkien.jpeg";
+
+// nationalité / dates / bio (si ça existe en BDD, on le prend)
+$auteurNat = $auteurMain ? pickField($auteurMain, ['auteur_nationalite', 'nationalite'], '') : '';
+$auteurNaissance = $auteurMain ? pickField($auteurMain, ['auteur_date_naissance', 'date_naissance', 'naissance'], '') : '';
+$auteurDeces = $auteurMain ? pickField($auteurMain, ['auteur_date_deces', 'date_deces', 'deces'], '') : '';
+$auteurBio = $auteurMain ? pickField($auteurMain, ['auteur_bio', 'bio', 'auteur_description', 'description'], '') : '';
 ?>
 
 <!-- ================== MAIN ================== -->
 
 <section class="book-detail flex-row wrap">
+
     <div class="cover flex-col ai-center">
-        <img src="../assets/fo/img/books/les-deux-tours.jpg" alt="">
+        <img src="<?php echo htmlspecialchars($coverSrc); ?>" alt="<?php echo htmlspecialchars($titre); ?>">
+
         <div class="book-btn flex-row jc-center ai-center">
             <button class="bd-btn">Emprunter</button>
             <button class="bd-btn">Favoris</button>
@@ -18,29 +127,29 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
     </div>
 
     <div class="content flex-col">
-        <h2 class="title">Le Seigneur des Anneaux : Les Deux Tours</h2>
-        <h3>J.R.R. Tolkien</h3>
-        <p class="description">La Fraternité de l'Anneau poursuit son voyage vers la Montagne du Feu où l'Anneau Unique fut forgé, et où Frodo a pour mission de le détruire.<br><br>
-            Cette quête terrible est parsemée d'embûches : Gandalf a disparu dans les Mines de la Moria et Boromir a succombé au pouvoir de l'Anneau. Frodo et Sam se sont échappés afin de poursuivre leur voyage jusqu'au coeur du Mordor.<br><br>
-            À présent, ils cheminent seuls dans la désolation qui entoure le pays de Sauron - mais c'est sans compter la mystérieuse silhouette qui les suit partout où ils vont. Chef-d'oeuvre de la fantasy, découverte d'un monde imaginaire, de sa géographie, de son histoire et de ses langues, mais aussi réflexion sur le pouvoir et la mort, Le Seigneur des Anneaux est sans équivalent par sa puissance d'évocation, son souffle et son ampleur.</p>
+        <h2 class="title"><?php echo htmlspecialchars($titre); ?></h2>
+        <h3><?php echo htmlspecialchars($auteurNom); ?></h3>
+
+        <p class="description">
+            <?php
+            // synopsis peut contenir du HTML si tu utilises CKEditor côté BO
+            echo !empty($synopsis) ? $synopsis : "Aucun synopsis.";
+            ?>
+        </p>
+
         <div class="book-tags flex-row ai-center wrap">
-
-        <?php
-        $selectGenres = $db->prepare(
-            'SELECT * 
-            FROM livres_genres 
-            NATURAL JOIN genres 
-            WHERE id_livre = ?');
-        $selectGenres->execute([3]);
-        $genres = $selectGenres->fetchAll();
-
-        foreach ($genres as $genre) {
-            echo '<button class="bd-btn">' . $genre['genre_tag'] . '</button>';
-        }
-        ?>
-            <button class="bd-btn">tag 1</button>
-
+            <?php
+            if (!empty($genres)) {
+                foreach ($genres as $g) {
+                    $tag = $g['genre_tag'] ?? '';
+                    if ($tag !== '') {
+                        echo '<button class="bd-btn">' . htmlspecialchars($tag) . '</button>';
+                    }
+                }
+            }
+            ?>
         </div>
+
         <div class="content-details flex-row">
             <div class="cd-title flex-col">
                 <p>Série</p>
@@ -49,24 +158,23 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
                 <p>ISBN</p>
                 <p>Publié le</p>
             </div>
-            <div class="cd-content flex-col">
-                <p>Le Seigneur des Anneaux</p>
-                <p>Christian Bourgois</p>
-                <p>Francais</p>
-                <p>9782267044706</p>
-                <p>11 Novembre 1954</p>
 
+            <div class="cd-content flex-col">
+                <p><?php echo htmlspecialchars($serieNom); ?></p>
+                <p><?php echo htmlspecialchars($editeur); ?></p>
+                <p><?php echo htmlspecialchars($langue); ?></p>
+                <p><?php echo htmlspecialchars($isbn); ?></p>
+                <p><?php echo htmlspecialchars($datePub); ?></p>
             </div>
         </div>
-
-
     </div>
 
     <div class="author flex-col">
-        <a href="author-detail.php" class="author-header flex-row ai-center">
-            <img src="../assets/fo/img/books/tolkien.jpeg" alt="">
-            <h2 class="">J.R.R. Tolkien</h2>
+        <a href="author-detail.php<?php echo ($auteurId > 0 ? ('?id=' . $auteurId) : ''); ?>" class="author-header flex-row ai-center">
+            <img src="<?php echo htmlspecialchars($auteurPhotoSrc); ?>" alt="">
+            <h2 class=""><?php echo htmlspecialchars($auteurNom); ?></h2>
         </a>
+
         <div class="content-details flex-row">
             <div class="cd-title flex-col">
                 <p>Nationalité</p>
@@ -74,22 +182,23 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
                 <p>Décédé le</p>
             </div>
             <div class="cd-content flex-col">
-                <p>Britannique</p>
-                <p>3 Janvier 1892</p>
-                <p>2 Septembre 1973</p>
+                <p><?php echo htmlspecialchars($auteurNat ?: ''); ?></p>
+                <p><?php echo htmlspecialchars($auteurNaissance ?: ''); ?></p>
+                <p><?php echo htmlspecialchars($auteurDeces ?: ''); ?></p>
             </div>
         </div>
-        <p>Né en 1892 à Bloemfontein (Afrique du Sud), John Ronald Reuel Tolkien passe son enfance, après la mort de son père en 1896, au village de Sarehole près de Birmingham (Agleterre), ville dont sa famille est originaire.<br><br>
-            Diplômé d'Oxford en 1919 (après avoir servi dans les Lancashire), il travaille au célèbre Dictionnaire d'Oxford, obtient ensuite un poste de maître assistant à Leeds, puis une chaire de langues anciennes (anglo-saxon) à Oxford de 1925 à 1945 - et de langue et littérature anglaises de 1945 à sa retraite en 1959.<br><br>
-            Spécialiste de philologie faisant autorité dans le monde entier, J.R.R. Tolkien a écrit en 1936 Le Hobbit, considéré comme un classique de la littérature enfantine; en 1938-1939: un essai sur les contes de fées. Paru en 1949, Farmer Giles of Ham a séduit également adultes et enfants. J.R.R. Tolkien a travaillé quatorze ans au cycle intitulé Les Seigneur des Anneaux composé de: La Communauté de l'anneau (1954), Les Deux tours (1954), Le retour du roi (1955) -œuvre magistrale qui s'est imposée dans tous les pays.<br><br>
-            Dans Les Aventures de Tom Bombadil (1962), J.R.R. Tolkien déploie son talent pour les assonances ingénieuses. En 1968, il enregistre sur disque les Poèmes et Chansons de la Terre du Milieu, tiré des Aventures de Tom Bombadil et du Seigneur des Anneaux. Le conte de Smith of Wootton Major a paru en 1967.<br><br>
-            John Ronald Reuel Tolkien est mort en 1973.</p>
+
+        <p>
+            <?php
+            // Si pas de bio en BDD, on laisse vide (tu pourras remplir plus tard)
+            echo !empty($auteurBio) ? $auteurBio : "";
+            ?>
+        </p>
     </div>
 
 </section>
 
 <!-- ================== FOOTER ================== -->
-
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/blocks/footer.php');
 ?>

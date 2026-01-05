@@ -1,159 +1,302 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT'].'/host.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/host.php');
 
-include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/sidebar.php');
-
-include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/header.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/bo/_blocks/sidebar.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/bo/_blocks/header.php');
 
 $domaine = "Dashboard";
 $sousDomaine = "Livres / Liste";
 
-include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/ariane.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/bo/_blocks/ariane.php');
 
-
-
-if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
+if (isset($_GET['action']) && $_GET['action'] == "modifLivre") {
 
     // Je récupère l'id dans le Get qui correspond au livre que je veux modifier.
-    $id = $_GET['id'];
+    $id = (int)($_GET['id'] ?? 0);
+    if ($id <= 0) {
+        echo "<script language='javascript'>document.location.replace('livres.php?zone=livres')</script>";
+        exit;
+    }
 
-    // Je sélectionne le livre dans la table à l'aide de l'id récupéré dans le GET.
-    $selectLivre = $db->prepare('SELECT * FROM livres
-        LEFT JOIN livres_auteurs ON livres_auteurs.id_livre = livres.id_livre
-        LEFT JOIN auteurs ON livres_auteurs.id_auteur = auteurs.id_auteur
-
-        LEFT JOIN livres_genres ON livres_genres.id_livre = livres.id_livre
-        LEFT JOIN genres ON livres_genres.id_genre = genres.id_genre
-
-        LEFT JOIN livres_series ON livres_series.id_livre = livres.id_livre
-        LEFT JOIN series ON livres_series.id_serie = series.id_serie
-
-        LEFT JOIN langues ON livres.id_langue = langues.id_langue
-        WHERE livres.id_livre = ?
-    ');
+    // ====== Récup livre
+    $selectLivre = $db->prepare('SELECT * FROM livres WHERE id_livre = ?');
     $selectLivre->execute([$id]);
-    
-    
     $livre = $selectLivre->fetch(PDO::FETCH_OBJ);
 
-    // auteur
-    $id_auteur = [$livre->id_auteur];
-    $id_auteur_cleaned = implode(',', array_fill(0, count($id_auteur), '?'));
+    if (!$livre) {
+        echo "<script language='javascript'>document.location.replace('livres.php?zone=livres')</script>";
+        exit;
+    }
 
-    $selectAuteurs = $db->prepare('SELECT * FROM auteurs
-        WHERE id_auteur NOT IN (?)
-        ');
-    $selectAuteurs->execute([$id_auteur_cleaned]);
+    // ====== Valeurs actuelles pivot (1 seul auteur/genre/série dans ton UI)
+    $getAuteur = $db->prepare("SELECT id_auteur FROM livres_auteurs WHERE id_livre = ? LIMIT 1");
+    $getAuteur->execute([$id]);
+    $currentAuteur = (int)($getAuteur->fetchColumn() ?: 0);
 
-    // genre
-    $id_genre = [$livre->id_genre];
-    $id_genre_cleaned = implode(',', array_fill(0, count($id_genre), '?'));
+    $getGenre = $db->prepare("SELECT id_genre FROM livres_genres WHERE id_livre = ? LIMIT 1");
+    $getGenre->execute([$id]);
+    $currentGenre = (int)($getGenre->fetchColumn() ?: 0);
 
-    $selectGenres = $db->prepare('SELECT *FROM genres
-        WHERE id_genre NOT IN (?)
-    ');
-    $selectGenres->execute([$id_genre_cleaned]);
+    $getSerie = $db->prepare("SELECT id_serie FROM livres_series WHERE id_livre = ? LIMIT 1");
+    $getSerie->execute([$id]);
+    $currentSerie = (int)($getSerie->fetchColumn() ?: 0);
 
-    // serie
-    $id_serie = [$livre->id_serie];
-    $id_serie_cleaned = implode(',', array_fill(0, count($id_serie), '?'));
+    // ====== Lists
+    $selectLangues = $db->prepare('SELECT * FROM langues');
+    $selectLangues->execute();
 
-    $selectSeries = $db->prepare('SELECT * FROM series
-        WHERE id_serie NOT IN (?)
-        ');
-    $selectSeries->execute([$id_serie_cleaned]);
+    $selectAuteursAll = $db->prepare('SELECT * FROM auteurs');
+    $selectAuteursAll->execute();
 
-    // langue
-    $id_langue = $livre->id_langue;
+    $selectGenresAll = $db->prepare('SELECT * FROM genres');
+    $selectGenresAll->execute();
 
-    $selectLangues = $db->prepare('SELECT * FROM langues
-        WHERE id_langue != ?
-        ');
-    $selectLangues->execute([$id_langue]);
+    $selectSeriesAll = $db->prepare('SELECT * FROM series');
+    $selectSeriesAll->execute();
 
-    
+    // ====== DELETE (depuis la page d'édition)
+    if (isset($_POST['deleteLivre'])) {
 
+        // Optionnel : récupérer la couverture pour supprimer le fichier ensuite
+        $getCover = $db->prepare("SELECT livre_couverture FROM livres WHERE id_livre = ?");
+        $getCover->execute([$id]);
+        $coverToDelete = $getCover->fetchColumn();
 
+        // Suppressions (ordre important si FK)
+        $db->prepare("DELETE FROM exemplaires WHERE id_livre = ?")->execute([$id]);
+        $db->prepare("DELETE FROM livres_auteurs WHERE id_livre = ?")->execute([$id]);
+        $db->prepare("DELETE FROM livres_genres  WHERE id_livre = ?")->execute([$id]);
+        $db->prepare("DELETE FROM livres_series  WHERE id_livre = ?")->execute([$id]);
 
+        // Livre
+        $db->prepare("DELETE FROM livres WHERE id_livre = ?")->execute([$id]);
 
-
-    // if(isset($_POST['addAuteur'])){
-    //     $id_auteur = $_POST['id_auteur'];
-
-    //     $insertAuteur = $db->prepare('INSERT INTO livres_auteurs SET
-    //         id_auteur = ?,
-    //         id_livre = ?
-    //     ');
-    //     $insertAuteur->execute([$id_auteur, $id]);
-
-    //     echo "<script language='javascript'>
-    //         document.location.replace('livres.php?zone=livres&action=modifLivre&id=".$id."')
-    //         </script>";
-    // }
-
-    // if(isset($_POST['updateLivre'])){
-    //     $synopsis = $_POST['livre_synopsis'];
-
-    //     $updateLivre = $db->prepare('UPDATE livres SET
-    //         livre_synopsis = ?
-    //         WHERE id_livre = ?    
-    //     ');
-    //     $updateLivre->execute([$synopsis, $id]);
-
-    //     $_SESSION['flash']['success'] = "votre livre a bien été modifié";
-
-    //     echo "<script language='javascript'>
-    //         document.location.replace('livres.php?zone=livres')
-    //         </script>";
-    // }  
-
-    ?>
-
-    <form method="POST">
-
-        <p>Liste des auteurs :</p>
-        <?php
-            if(!empty($livre->id_auteur)){
-                foreach($livre as $auteursLoop){
-                    ?>
-                        <p>- <?php echo $livre->auteur_prenom;?> <?php echo $livre->auteur_nom;?></p><i class="las la-trash-alt"></i>
-                    <?php
-                }
-            }else{
-                echo "<p>Aucun auteur n'est renseigné !</p>";
+        // Optionnel : supprimer le fichier de couverture (sauf placeholder)
+        if (!empty($coverToDelete)) {
+            $path = $_SERVER['DOCUMENT_ROOT'] . '/assets/bo/img/' . $coverToDelete;
+            if (basename($coverToDelete) !== '1.jpeg' && file_exists($path)) {
+                @unlink($path);
             }
-            // form ajouter un auteur
-            ?>
-            <form method="POST">
-            <?php
-            
-            
-            ?>
-            </form>
-        
+        }
+
+        $_SESSION['flash']['success'] = "Livre supprimé.";
+        echo "<script language='javascript'>document.location.replace('livres.php?zone=livres')</script>";
+        exit;
+    }
+
+    // ====== UPDATE
+    if (isset($_POST['updateLivre'])) {
+
+        $titre    = trim($_POST['livre_titre'] ?? '');
+        $isbn     = trim($_POST['livre_isbn'] ?? '');
+        $langue   = (int)($_POST['id_langue'] ?? 0);
+        $auteur   = (int)($_POST['id_auteur'] ?? 0);
+        $genre    = (int)($_POST['id_genre'] ?? 0);
+        $serie    = (int)($_POST['id_serie'] ?? 0);
+        $editeur  = trim($_POST['livre_editeur'] ?? '');
+        $synopsis = $_POST['livre_synopsis'] ?? '';
+        $datepub  = $_POST['livre_date_publication'] ?? null;
+
+        // obligatoires (comme ton add)
+        if ($titre !== '' && $isbn !== '' && $langue > 0) {
+
+            // Update livres
+            $upLivre = $db->prepare("UPDATE livres SET
+                livre_titre = ?,
+                livre_isbn = ?,
+                id_langue = ?,
+                livre_editeur = ?,
+                livre_synopsis = ?,
+                livre_date_publication = ?
+                WHERE id_livre = ?
+            ");
+            $upLivre->execute([$titre, $isbn, $langue, $editeur, $synopsis, $datepub, $id]);
+
+            // Update pivots (on remplace tout, simple et fiable)
+            $db->prepare("DELETE FROM livres_auteurs WHERE id_livre = ?")->execute([$id]);
+            if ($auteur > 0) {
+                $db->prepare("INSERT INTO livres_auteurs (id_livre, id_auteur) VALUES (?, ?)")->execute([$id, $auteur]);
+            }
+
+            $db->prepare("DELETE FROM livres_genres WHERE id_livre = ?")->execute([$id]);
+            if ($genre > 0) {
+                $db->prepare("INSERT INTO livres_genres (id_livre, id_genre) VALUES (?, ?)")->execute([$id, $genre]);
+            }
+
+            $db->prepare("DELETE FROM livres_series WHERE id_livre = ?")->execute([$id]);
+            if ($serie > 0) {
+                $db->prepare("INSERT INTO livres_series (id_livre, id_serie) VALUES (?, ?)")->execute([$id, $serie]);
+            }
+
+            // Upload couverture (optionnel)
+            if (!empty($_FILES['livre_couverture']) && !empty($_FILES['livre_couverture']['name'])) {
+
+                $error = $_FILES['livre_couverture']['error'];
+                $size  = $_FILES['livre_couverture']['size'];
+                $type  = $_FILES['livre_couverture']['type'];
+
+                if ($error == 0) {
+                    if ($size < 5000000) {
+
+                        $ext = explode('/', $type);
+                        $img_ext = strtolower(end($ext));
+
+                        if (in_array($img_ext, ['jpeg', 'png', 'jpg', 'webp'])) {
+
+                            $img_name = $id . '.' . $img_ext;
+
+                            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/assets/bo/img/';
+                            if (!is_dir($uploadDir)) {
+                                @mkdir($uploadDir, 0777, true);
+                            }
+
+                            move_uploaded_file($_FILES['livre_couverture']['tmp_name'], $uploadDir . $img_name);
+
+                            $insertImg = $db->prepare("UPDATE livres SET livre_couverture = ? WHERE id_livre = ?");
+                            $insertImg->execute([$img_name, $id]);
+                        } else {
+                            $_SESSION['flash']['danger'] = "Sélectionnez un fichier image (jpg/png/webp).";
+                        }
+                    } else {
+                        $_SESSION['flash']['danger'] = "Votre image est trop lourde (maximum 5Mo)";
+                    }
+                } else {
+                    $_SESSION['flash']['danger'] = "Le téléchargement a échoué.";
+                }
+            }
+
+            // retour liste
+            echo "<script language='javascript'>document.location.replace('livres.php?zone=livres')</script>";
+            exit;
+        } else {
+            $_SESSION['flash']['danger'] = "Vous n'avez pas renseigné tout les champs obligatoires";
+        }
+    }
+
+    // Refresh livre + pivots après update / affichage
+    $selectLivre->execute([$id]);
+    $livre = $selectLivre->fetch(PDO::FETCH_OBJ);
+
+    $getAuteur->execute([$id]);
+    $currentAuteur = (int)($getAuteur->fetchColumn() ?: 0);
+
+    $getGenre->execute([$id]);
+    $currentGenre = (int)($getGenre->fetchColumn() ?: 0);
+
+    $getSerie->execute([$id]);
+    $currentSerie = (int)($getSerie->fetchColumn() ?: 0);
+
+    // cover
+    $cover = $livre->livre_couverture;
+    if (empty($cover)) {
+        $cover = '1.jpeg';
+    }
+?>
+
+    <!-- Visuel inchangé: on reste sur des <div> simples + CKEditor -->
+    <form method="POST" enctype="multipart/form-data">
+
+        <p>Couverture actuelle :</p>
+        <div class="client" style="margin-bottom: 10px;">
+            <div class="client-img bg-img" style="background-image: url(/assets/bo/img/<?php echo $cover; ?>)"></div>
+            <div class="client-info">
+                <h4><?php echo $livre->livre_titre; ?></h4>
+                <small>#<?php echo (int)$livre->id_livre; ?></small>
+            </div>
+        </div>
+
+        <div>
+            <label for="">Changer la couverture</label>
+            <input type="file" name="livre_couverture">
+        </div>
 
         <hr>
 
-        </select>
+        <div>
+            <label for="">Nom du livre (obligatoire)</label>
+            <input type="text" name="livre_titre" value="<?php echo htmlspecialchars($livre->livre_titre); ?>">
+        </div>
 
         <div>
-            <label for="">Nom du livre</label>
-            <input type="text" name="livre_titre" value="<?php echo $livre->livre_titre;?>">
+            <label for="">ISBN (obligatoire)</label>
+            <input type="text" name="livre_isbn" value="<?php echo htmlspecialchars($livre->livre_isbn); ?>">
+        </div>
+
+        <div>
+            <label for="">Langue (obligatoire)</label>
+            <select name="id_langue">
+                <?php while ($sL = $selectLangues->fetch(PDO::FETCH_OBJ)) { ?>
+                    <option value="<?php echo $sL->id_langue; ?>" <?php if ((int)$livre->id_langue === (int)$sL->id_langue) echo "selected"; ?>>
+                        <?php echo $sL->langue_nom; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div>
+            <label for="">Auteur</label>
+            <select name="id_auteur">
+                <option value="" class="nullSelect">(Aucun)</option>
+                <?php while ($sA = $selectAuteursAll->fetch(PDO::FETCH_OBJ)) { ?>
+                    <option value="<?php echo $sA->id_auteur; ?>" <?php if ($currentAuteur === (int)$sA->id_auteur) echo "selected"; ?>>
+                        <?php echo $sA->auteur_prenom; ?> <?php echo $sA->auteur_nom; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div>
+            <label for="">Genre</label>
+            <select name="id_genre">
+                <option value="" class="nullSelect">(Aucun)</option>
+                <?php while ($sG = $selectGenresAll->fetch(PDO::FETCH_OBJ)) { ?>
+                    <option value="<?php echo $sG->id_genre; ?>" <?php if ($currentGenre === (int)$sG->id_genre) echo "selected"; ?>>
+                        <?php echo $sG->genre_tag; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div>
+            <label for="">Serie</label>
+            <select name="id_serie">
+                <option value="" class="nullSelect">(Aucune)</option>
+                <?php while ($sSe = $selectSeriesAll->fetch(PDO::FETCH_OBJ)) { ?>
+                    <option value="<?php echo $sSe->id_serie; ?>" <?php if ($currentSerie === (int)$sSe->id_serie) echo "selected"; ?>>
+                        <?php echo $sSe->serie_nom; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div>
+            <label for="">Editeur</label>
+            <input type="text" name="livre_editeur" value="<?php echo htmlspecialchars($livre->livre_editeur); ?>">
         </div>
 
         <div>
             <label for="">synopsis du livre</label>
-            <textarea class="ckeditor" name="livre_synopsis" id="" placeholder="Ecrire le synopsis ici"><?php echo $livre->livre_synopsis;?></textarea>
+            <textarea class="ckeditor" name="livre_synopsis" id="" placeholder="Ecrire le synopsis ici"><?php echo htmlspecialchars($livre->livre_synopsis); ?></textarea>
         </div>
 
         <div>
             <label for="">Date d'écriture du livre</label>
-            <input type="date" name="livre_date_publication" value="<?php echo $livre->livre_date_publication;?>">
+            <input type="date" name="livre_date_publication" value="<?php echo htmlspecialchars($livre->livre_date_publication); ?>">
         </div>
 
         <div>
-            <input type="submit" value="Enr" name="updateLivre">
+            <input type="submit" value="Enregistrer" name="updateLivre">
+
+            <button type="submit"
+                name="deleteLivre"
+                onclick="return confirm('Supprimer ce livre ? Cette action est irréversible.');"
+                style="margin-left:10px;">
+                Supprimer
+            </button>
+
+            <a href="livres.php?zone=livres" style="margin-left:10px;">Retour</a>
         </div>
+
 
     </form>
 
@@ -161,31 +304,14 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
         CKEDITOR.replace('livre_synopsis');
     </script>
 
-    <form method="POST">        
+<?php
 
-        <label for="">Sélectionner un auteur</label>
-        <select name="id_auteur">
-            <?php
-            while($sA = $select_auteurs->fetch(PDO::FETCH_OBJ)){
-                ?>
-                    <option value="<?php echo $sA->id_auteur;?>"><?php echo ucwords($sA->auteur_prenom);?> <?php echo ucwords($sA->auteur_nom);?></option>
-                <?php
-            }
-            ?>
-        </select>
+} else {
 
-        <div>
-            <input type="submit" value="Enr" name="addAuteur">
-        </div>
-    </form>
-
-    <?php
-
-}else{
-
-    $selectLivres = $db->prepare('SELECT * FROM livres
+    $selectLivres = $db->prepare(
+        'SELECT * FROM livres
         NATURAL JOIN langues'
-        );
+    );
     $selectLivres->execute();
 
     $selectGenres = $db->prepare('SELECT * FROM genres');
@@ -200,32 +326,47 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
     $selectAuteurs = $db->prepare('SELECT * FROM auteurs');
     $selectAuteurs->execute();
 
+    if (isset($_POST['addLivre'])) {
 
-    if(isset($_POST['addLivre'])){
+        // champs
+        $titre   = htmlspecialchars($_POST['livre_titre'] ?? '');
+        $isbn    = htmlspecialchars($_POST['livre_isnb'] ?? ''); // garde ton name actuel
+        $langue  = $_POST['id_langue'] ?? '';
+        $auteur  = $_POST['id_auteur'] ?? '';
+        $genre   = $_POST['id_genre'] ?? '';
+        $serie   = $_POST['id_serie'] ?? '';
+        $synopsis = $_POST['livre_synopsis'] ?? ''; // html possible
+        $editeur = htmlspecialchars($_POST['livre_editeur'] ?? '');
+        $date    = $_POST['livre_date_publication'] ?? '';
 
-        //gathering all the data, all of it
+        // upload
+        $img = '';
+        $tmp_img = '';
+        $error = 0;
+        $size = 0;
+        $type = '';
+        $img_ext = '';
 
-        $titre = htmlspecialchars($_POST['livre_titre']);
-        $isbn = htmlspecialchars($_POST['livre_isnb']);
-        $langue = $_POST['id_langue'];
-        $auteur = $_POST['id_auteur'];
-        $genre = $_POST['id_genre'];
-        $serie = $_POST['id_serie'];
-        $synopsis = $_POST['livre_synopsis']; //this input isn't sanitized cuz it receives html info. it SHOULD however, in practice, be ran through some kind of "remove all the disallowed html tags server side too" script if we were to do this proper
-        $editeur = htmlspecialchars($_POST['livre_editeur']);
-        $date = $_POST['livre_date_publication'];
+        if (!empty($_FILES['livre_couverture']) && !empty($_FILES['livre_couverture']['name'])) {
+            // si tu as une fonction noAccent/noaccent dans functions.php, elle sera utilisée.
+            $img = $_FILES['livre_couverture']['name'];
+            if (function_exists('noAccent')) {
+                $img = noAccent($img);
+            } elseif (function_exists('noaccent')) {
+                $img = noaccent($img);
+            }
 
-        //if i don't do an empty check it throws an error ig :V
-        if(!empty($FILES_['livre_couverture'])){
-        $img = noaccent($_FILES['livre_couverture']['name']);
-        $tmp_img = $_FILES['livre_couverture']['tmp_name'];
-        $error = $_FILES['livre_couverture']['error'];
-        $size = $_FILES['livre_couverture']['size'];
-        $type = $_FILES['livre_couverture']['type'];
+            $tmp_img = $_FILES['livre_couverture']['tmp_name'];
+            $error   = $_FILES['livre_couverture']['error'];
+            $size    = $_FILES['livre_couverture']['size'];
+            $type    = $_FILES['livre_couverture']['type'];
+
+            $ext = explode('/', $type);
+            $img_ext = strtolower(end($ext));
         }
 
-        //checking if the main stuff can be uploaded
-        if(!empty($titre) && !empty($isbn) && !empty($langue)){
+        // obligatoire
+        if (!empty($titre) && !empty($isbn) && !empty($langue)) {
 
             $insert_livre = $db->prepare('INSERT INTO livres SET
                 livre_titre = ?,
@@ -235,176 +376,165 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
             $insert_livre->execute([$titre, $isbn, $langue]);
             $newId = $db->lastInsertId();
 
-            //logic for the optional bits
-            //image (by far the one with the most checks (upload error, size, type))
-            if(!empty($img)){
-                if($error == 0){
-                    if($size < 2000000){
-                        if($img_ext === "jpeg" || $img_ext === "png" || $img_ext === "jpg"){
-                                                
-                            $ext = explode('/', $type);
-                            $img_ext = end($ext);
-                            $img_name = $newId.'.'.$img_ext;
+            // dossier réel du projet (il existe dans ton zip)
+            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/assets/bo/img/';
+            if (!is_dir($uploadDir)) {
+                @mkdir($uploadDir, 0777, true);
+            }
+
+            // image
+            if (!empty($img)) {
+                if ($error == 0) {
+                    if ($size < 5000000) {
+                        if (in_array($img_ext, ['jpeg', 'png', 'jpg'])) {
+
+                            $img_name = $newId . '.' . $img_ext;
 
                             $insertImg = $db->prepare("UPDATE livres SET
-                            livre_couverture = ?
-                            WHERE id_livre = ?
+                                livre_couverture = ?
+                                WHERE id_livre = ?
                             ");
                             $insertImg->execute([$img_name, $newId]);
-                            
-                            move_uploaded_file($tmp_img, $_SERVER['DOCUMENT_ROOT'].'/bo/_imgs/admin/'.$img_name);
-                            
-                        }else{ 
-                            $_SESSION['flash']['danger'] = "Sélectionnez un fichier image.";
+
+                            move_uploaded_file($tmp_img, $uploadDir . $img_name);
+                        } else {
+                            $_SESSION['flash']['danger'] = "Sélectionnez un fichier image (jpg/png).";
                         }
-
-                    }else{ 
-                        $_SESSION['flash']['danger'] = "Votre image est trop lourde (maximum 2Mo)";
+                    } else {
+                        $_SESSION['flash']['danger'] = "Votre image est trop lourde (maximum 5Mo)";
                     }
-
-                }else{ 
+                } else {
                     $_SESSION['flash']['danger'] = "Le téléchargement a échoué.";
                 }
             }
 
-            //auteur
-            if(!empty($auteur)){
+            // auteur
+            if (!empty($auteur)) {
                 $insertauteur = $db->prepare("INSERT INTO livres_auteurs SET
-                id_auteur = ?,
-                id_livre = ?
+                    id_auteur = ?,
+                    id_livre = ?
                 ");
                 $insertauteur->execute([$auteur, $newId]);
             }
 
-            //genre
-            if(!empty($genre)){
+            // genre
+            if (!empty($genre)) {
                 $insertGenre = $db->prepare("INSERT INTO livres_genres SET
-                id_genre = ?,
-                id_livre = ?
+                    id_genre = ?,
+                    id_livre = ?
                 ");
                 $insertGenre->execute([$genre, $newId]);
             }
 
-            //serie
-            if(!empty($serie)){
+            // serie
+            if (!empty($serie)) {
                 $insertSerie = $db->prepare("INSERT INTO livres_series SET
-                id_serie = ?,
-                id_livre = ?
+                    id_serie = ?,
+                    id_livre = ?
                 ");
                 $insertSerie->execute([$serie, $newId]);
             }
 
-            //synopsis
-            if(!empty($synopsis)){
+            // synopsis
+            if (!empty($synopsis)) {
                 $insertSynopsis = $db->prepare("UPDATE livres SET
-                livre_synopsis = ?
-                WHERE id_livre = ?
+                    livre_synopsis = ?
+                    WHERE id_livre = ?
                 ");
                 $insertSynopsis->execute([$synopsis, $newId]);
             }
 
-            //editeur
-            if(!empty($editeur)){
-                $insertSynopsis = $db->prepare("UPDATE livres SET
-                livre_editeur = ?
-                WHERE id_livre = ?
+            // editeur
+            if (!empty($editeur)) {
+                $insertEditeur = $db->prepare("UPDATE livres SET
+                    livre_editeur = ?
+                    WHERE id_livre = ?
                 ");
-                $insertSynopsis->execute([$editeur, $newId]);
+                $insertEditeur->execute([$editeur, $newId]);
             }
 
-            //date
-            if(!empty($date)){
+            // date
+            if (!empty($date)) {
                 $insertDate = $db->prepare("UPDATE livres SET
-                livre_date_publication = ?
-                WHERE id_livre = ?
+                    livre_date_publication = ?
+                    WHERE id_livre = ?
                 ");
                 $insertDate->execute([$date, $newId]);
             }
-
-            // echo "<script language='javascript'>
-            //     document.location.replace('livres.php?zone=livres&action=modifLivre&id=$newId')
-            //     </script>";
-
-        }else{
+        } else {
             $_SESSION['flash']['danger'] = "Vous n'avez pas renseigné tout les champs obligatoires";
 
-            //making it so if they forgot to fill something the user keeps non-dropdown data so they won't want to commit die(); because they just lost 30 lines of synopsis           
             unset($_SESSION['old']);
-            //it already should be unset, but you know what they say. don't trust any code, not even your own code
             $_SESSION['old'] = [
                 'livre_titre' => $titre,
-                'livre_isbn' => $isbn,
+                'livre_isnb' => $isbn,         // ✅ bon nom
                 'livre_editeur' => $editeur,
                 'livre_synopsis' => $synopsis,
             ];
-            //fuck yeah associative arrays
 
             echo "<script language='javascript'>
-            document.location.replace('livres.php?zone=livres')
-            </script>"; 
+                document.location.replace('livres.php?zone=livres')
+            </script>";
         }
     }
 
-    //pushing the fail's data in & emptying the variable
-    if(!empty($_SESSION['old'])){
-        
+    // repop si erreur
+    if (!empty($_SESSION['old'])) {
+
         $old = $_SESSION['old'];
 
-        if(!empty($old['livre_titre'])){
+        if (!empty($old['livre_titre'])) {
             $old_titre = $old['livre_titre'];
         }
 
-        if(!empty($old['livre_isnb'])){
-            $old_isbn = $old['livre_isbn'];
+        if (!empty($old['livre_isnb'])) {   // ✅ bon nom
+            $old_isbn = $old['livre_isnb'];
         }
-        
-        if(!empty($old['livre_editeur'])){
+
+        if (!empty($old['livre_editeur'])) {
             $old_editeur = $old['livre_editeur'];
         }
-        
-        if(!empty($old['livre_synopsis'])){
+
+        if (!empty($old['livre_synopsis'])) {
             $old_synopsis = $old['livre_synopsis'];
         }
 
         unset($_SESSION['old']);
     }
-    ?>
+?>
 
-    <form method="POST">
+    <!-- ✅ IMPORTANT: enctype sur le FORM (pas sur l'input) -->
+    <form method="POST" enctype="multipart/form-data">
 
         <div>
             <label for="">Nom (obligatoire)</label>
-            <input type="text" name="livre_titre" value="<?php if(!empty($old_titre)){echo $old_titre ;}?>">
+            <input type="text" name="livre_titre" value="<?php if (!empty($old_titre)) {
+                                                                echo $old_titre;
+                                                            } ?>">
         </div>
 
         <div>
             <label for="">ISBN (obligatoire)</label>
-            <input type="text" name="livre_isnb" value="<?php if(!empty($old_isbn)){echo $old_isbn ;}?>">
+            <input type="text" name="livre_isnb" value="<?php if (!empty($old_isbn)) {
+                                                            echo $old_isbn;
+                                                        } ?>">
         </div>
-                
+
         <div>
             <label for="">Langue (obligatoire)</label>
             <select name="id_langue" id="" value="">
-                <?php
-                while($sL = $selectLangues->fetch(PDO::FETCH_OBJ)){
-                    ?>
-                        <option value="<?php echo $sL->id_langue;?>"><?php echo $sL->langue_nom;?></option>
-                    <?php
-                }
-                ?>
+                <?php while ($sL = $selectLangues->fetch(PDO::FETCH_OBJ)) { ?>
+                    <option value="<?php echo $sL->id_langue; ?>"><?php echo $sL->langue_nom; ?></option>
+                <?php } ?>
             </select>
         </div>
-          
+
         <div>
             <label for="">Auteur</label>
             <select name="id_auteur" id="" value="">
-                <?php
-                while($sA = $selectAuteurs->fetch(PDO::FETCH_OBJ)){
-                    ?>
-                        <option value="<?php echo $sA->id_auteur;?>"><?php echo $sA->auteur_prenom;?> <?php echo $sA->auteur_nom;?></option>
-                    <?php
-                }
-                ?>
+                <?php while ($sA = $selectAuteurs->fetch(PDO::FETCH_OBJ)) { ?>
+                    <option value="<?php echo $sA->id_auteur; ?>"><?php echo $sA->auteur_prenom; ?> <?php echo $sA->auteur_nom; ?></option>
+                <?php } ?>
             </select>
         </div>
 
@@ -412,13 +542,9 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
             <label for="">Genre</label>
             <select name="id_genre" id="">
                 <option value="" class="nullSelect">(Aucun)</option>
-                <?php
-                while($sG = $selectGenres->fetch(PDO::FETCH_OBJ)){
-                    ?>
-                        <option value="<?php echo $sG->id_genre;?>"><?php echo $sG->genre_tag;?></option>
-                    <?php
-                }
-                ?>
+                <?php while ($sG = $selectGenres->fetch(PDO::FETCH_OBJ)) { ?>
+                    <option value="<?php echo $sG->id_genre; ?>"><?php echo $sG->genre_tag; ?></option>
+                <?php } ?>
             </select>
         </div>
 
@@ -426,29 +552,29 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
             <label for="">Serie</label>
             <select name="id_serie" id="">
                 <option value="" class="nullSelect">(Aucune)</option>
-                <?php
-                while($sSe = $selectSeries->fetch(PDO::FETCH_OBJ)){
-                    ?>
-                        <option value="<?php echo $sSe->id_serie;?>"><?php echo $sSe->serie_nom;?></option>
-                    <?php
-                }
-                ?>
+                <?php while ($sSe = $selectSeries->fetch(PDO::FETCH_OBJ)) { ?>
+                    <option value="<?php echo $sSe->id_serie; ?>"><?php echo $sSe->serie_nom; ?></option>
+                <?php } ?>
             </select>
         </div>
 
         <div>
             <label for="">Ajouter une image de couverture</label>
-            <input type="file" enctype="multipart/form-data" name="livre_couverture">
+            <input type="file" name="livre_couverture">
         </div>
 
         <div>
             <label for="">Editeur</label>
-            <input type="text" name="livre_editeur" value="<?php if(!empty($old_editeur)){echo $old_editeur ;}?>">
+            <input type="text" name="livre_editeur" value="<?php if (!empty($old_editeur)) {
+                                                                echo $old_editeur;
+                                                            } ?>">
         </div>
 
         <div>
             <label for="">Synopsis</label>
-            <textarea name="livre_synopsis" id="" placeholder="Ecrire le synopsis ici"><?php if(!empty($old_synopsis)){echo $old_synopsis ;}?></textarea>
+            <textarea name="livre_synopsis" id="" placeholder="Ecrire le synopsis ici"><?php if (!empty($old_synopsis)) {
+                                                                                            echo $old_synopsis;
+                                                                                        } ?></textarea>
         </div>
 
         <div>
@@ -483,123 +609,104 @@ if(isset($_GET['action']) && $_GET['action'] == "modifLivre"){
                 </thead>
                 <tbody>
                     <?php
-                        while($sL = $selectLivres->fetch(PDO::FETCH_OBJ)){
-                            
-                            $id = $sL->id_livre;
+                    while ($sL = $selectLivres->fetch(PDO::FETCH_OBJ)) {
 
-                            $selectLivresGenres = $db->prepare('SELECT * FROM livres_genres
+                        $id = $sL->id_livre;
+
+                        $selectLivresGenres = $db->prepare('SELECT * FROM livres_genres
                             NATURAL JOIN genres
                             WHERE id_livre = ?');
-                            $selectLivresGenres->execute([$id]);
+                        $selectLivresGenres->execute([$id]);
 
-                            $selectLivresAuteurs = $db->prepare('SELECT * FROM livres_auteurs
+                        $selectLivresAuteurs = $db->prepare('SELECT * FROM livres_auteurs
                             NATURAL JOIN auteurs
                             WHERE id_livre = ?');
-                            $selectLivresAuteurs->execute([$id]);
+                        $selectLivresAuteurs->execute([$id]);
 
-                            $selectLivresSeries = $db->prepare('SELECT * FROM livres_series
+                        $selectLivresSeries = $db->prepare('SELECT * FROM livres_series
                             NATURAL JOIN series
                             WHERE id_livre = ?');
-                            $selectLivresSeries->execute([$id]);
+                        $selectLivresSeries->execute([$id]);
 
-                            $selectExemplaires = $db->prepare('SELECT * FROM exemplaires
+                        $selectExemplaires = $db->prepare('SELECT * FROM exemplaires
                             WHERE id_livre = ?');
-                            $selectExemplaires->execute([$id]);
-                            $sE = count($selectExemplaires->fetchAll());
+                        $selectExemplaires->execute([$id]);
+                        $sE = count($selectExemplaires->fetchAll());
 
-                            //this is really just so it's easier to see empty synopsis lol
-                            $synopsis_short = $sL->livre_synopsis;
-                            if(!empty($synopsis_short)){
-                                $short = mb_substr($synopsis_short, 0, 15, 'UTF-8');
-                                //using mb for accents bc "just" substr can yeet them
-                                if (mb_strlen($synopsis_short, 'UTF-8') > 14) {
-                                    $short .= '…';
-                                }
-                                //adds ... only if it hits the limit
+                        $synopsis_short = $sL->livre_synopsis;
+                        $short = '';
+                        if (!empty($synopsis_short)) {
+                            $short = mb_substr($synopsis_short, 0, 15, 'UTF-8');
+                            if (mb_strlen($synopsis_short, 'UTF-8') > 14) {
+                                $short .= '…';
                             }
-                            ?>
-                            <tr>
-                                <td>#<?php echo $id;?></td>
-                                <!-- titre & couverture -->
-                                <td>
-                                    <div class="client">
-                                        <div class="client-img bg-img" style="background-image: url(img/<?php $livre_couverture; ?>)"></div>
-                                        <div class="client-info">
-                                            <h4><?php echo $sL->livre_titre;?></h4>
-                                            <small><?php echo $sE; ?> exemplaire<?php if($sE != 1){echo "s";} ?></small>
-                                        </div>
-                                    </div>
-                                </td>
+                        }
 
-                                <!-- isbn -->
-                                <td>
-                                    <?php echo $sL->livre_isbn;?>
-                                </td>
-
-                                <!-- langue -->
-                                <td>
-                                    <?php echo $sL->langue_nom;?>
-                                </td>
-
-                                <!-- auteur -->
-                                <td>
-                                    <?php while($sLA = $selectLivresAuteurs->fetch(PDO::FETCH_OBJ)){ echo '<div>'.$sLA->auteur_prenom.' '.$sLA->auteur_nom.'</div>'; } ?>
-                                </td>
-
-                                <!-- genre -->
-                                <td>
-                                    <?php while($sLG = $selectLivresGenres->fetch(PDO::FETCH_OBJ)){ echo '<div>'.$sLG->genre_tag.'</div>'; } ?>
-                                </td>
-
-                                <!-- serie -->
-                                <td>
-                                    <?php while($sLS = $selectLivresSeries->fetch(PDO::FETCH_OBJ)){ echo '<div>'.$sLS->serie_nom.'</div>'; } ?>
-                                </td>
-
-                                <!-- synopsis -->
-                                <td>
-                                    <?php if(!empty($short)){echo $short ;}?>
-                                </td>
-
-                                <!-- editeur -->
-                                <td>
-                                    <?php echo $sL->livre_editeur;?>
-                                </td>
-
-                                <!-- publication -->
-                                <td>
-                                    <?php echo $sL->livre_date_publication;?>
-                                </td>
-
-                                <!-- actions -->
-                                <td>
-                                    <div class="actions">
-                                        <span class="lab la-telegram-plane"></span>
-                                        <a href="livres.php?zone=livres&action=modifLivre&id=<?php echo $sL->id_livre;?>">
-                                            <span class="las la-eye"></span>
-                                        </a>
-                                        <span class="las la-ellipsis-v"></span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php
+                        // affichage couverture
+                        $cover = $sL->livre_couverture;
+                        if (empty($cover)) {
+                            $cover = '1.jpeg';
                         }
                     ?>
-                    
-                    
+                        <tr>
+                            <td>#<?php echo $id; ?></td>
+
+                            <td>
+                                <div class="client">
+                                    <div class="client-img bg-img" style="background-image: url(/assets/bo/img/<?php echo $cover; ?>)"></div>
+                                    <div class="client-info">
+                                        <h4><?php echo $sL->livre_titre; ?></h4>
+                                        <small><?php echo $sE; ?> exemplaire<?php if ($sE != 1) {
+                                                                                echo "s";
+                                                                            } ?></small>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td><?php echo $sL->livre_isbn; ?></td>
+                            <td><?php echo $sL->langue_nom; ?></td>
+
+                            <td>
+                                <?php while ($sLA = $selectLivresAuteurs->fetch(PDO::FETCH_OBJ)) {
+                                    echo '<div>' . $sLA->auteur_prenom . ' ' . $sLA->auteur_nom . '</div>';
+                                } ?>
+                            </td>
+
+                            <td>
+                                <?php while ($sLG = $selectLivresGenres->fetch(PDO::FETCH_OBJ)) {
+                                    echo '<div>' . $sLG->genre_tag . '</div>';
+                                } ?>
+                            </td>
+
+                            <td>
+                                <?php while ($sLS = $selectLivresSeries->fetch(PDO::FETCH_OBJ)) {
+                                    echo '<div>' . $sLS->serie_nom . '</div>';
+                                } ?>
+                            </td>
+
+                            <td><?php echo $short; ?></td>
+                            <td><?php echo $sL->livre_editeur; ?></td>
+                            <td><?php echo $sL->livre_date_publication; ?></td>
+
+                            <td>
+                                <div class="actions">
+                                    <span class="lab la-telegram-plane"></span>
+                                    <a href="livres.php?zone=livres&action=modifLivre&id=<?php echo $sL->id_livre; ?>">
+                                        <span class="las la-eye"></span>
+                                    </a>
+                                    <span class="las la-ellipsis-v"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
 
-        
-
     </div>
 
-
-
-    <?php
-      
+<?php
 }
 
-include($_SERVER['DOCUMENT_ROOT'].'/bo/_blocks/footer.php');
+include($_SERVER['DOCUMENT_ROOT'] . '/bo/_blocks/footer.php');
 ?>

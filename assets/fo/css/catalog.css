@@ -16,11 +16,58 @@
 	width: 20%;
 	height: fit-content;
 	border-radius: 12px;
-	gap: 8rem;
+
+	/* ✅ le fix : on contrôle l'espacement global */
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem; /* au lieu de 8rem */
 }
 
+/* évite les marges par défaut du titre (ça crée du vide) */
+.catalog-filters > h2 {
+	margin: 0;
+}
+
+/* ✅ Raccourcis de tri */
+.filter-shortcuts {
+	margin: 0; /* pas de marge parasite */
+}
+
+.shortcuts-title {
+	font-size: 12px;
+	opacity: 0.7;
+	margin: 0 0 0.4rem 0;
+}
+
+.shortcuts-wrap {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+}
+
+/* chips */
+.chip {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.25rem 0.5rem;
+	border-radius: 999px;
+	border: 1px solid rgba(255, 255, 255, 0.25);
+	font-size: 11px;
+	text-decoration: none;
+	opacity: 0.85;
+	line-height: 1;
+}
+
+.chip:hover {
+	opacity: 1;
+}
+
+/* Form filtres */
 form.filters {
+	display: flex;
+	flex-direction: column;
 	gap: 1rem;
+	margin: 0;
 }
 
 .filters input {
@@ -41,8 +88,13 @@ form.filters {
 	outline: none;
 }
 
+/* Boutons */
 .btns {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	gap: 1rem;
+	margin-top: 0.25rem; /* petit resserrage */
 }
 
 .btn {
@@ -84,4 +136,58 @@ form.filters {
 .catalog .books .title {
 	font-size: var(--font-book-title);
 	font-weight: bold;
+}
+
+/* Force une taille de carte cohérente */
+.catalog .books a {
+	width: 320px; /* ajuste si tu veux plus petit/grand */
+}
+
+/* Force les couvertures à rentrer proprement */
+.catalog .books a img {
+	width: 100%;
+	aspect-ratio: 2 / 3;
+	object-fit: cover;
+	display: block;
+}
+
+/* ============= FIX ALIGNEMENT CARTES CATALOGUE ============= */
+
+/* 1) Toutes les cartes sur la même base */
+.catalog .books {
+	align-items: flex-end;
+}
+
+/* 2) Le lien devient une "carte" en colonne */
+.catalog .books a {
+	display: flex;
+	flex-direction: column;
+}
+
+/* 3) Titre sur 2 lignes max */
+.catalog .books .title {
+	font-size: var(--font-book-title);
+	font-weight: bold;
+
+	line-height: 1.25;
+	margin-top: 0.75rem;
+
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+
+	min-height: calc(1.25em * 2);
+}
+
+/* Auteur sur 1 ligne */
+.catalog .books .author {
+	line-height: 1.2;
+	min-height: 1.2em;
+}
+
+@media (max-width: 900px) {
+	.catalog .books a {
+		width: 180px;
+	}
 }

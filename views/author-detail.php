@@ -2,8 +2,71 @@
 include($_SERVER['DOCUMENT_ROOT'] . '/host.php');
 
 // ================== HEADER ==================
-
 include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
+
+// ================== ID auteur ==================
+$id = (int)($_GET['id'] ?? 0);
+if ($id <= 0) {
+    header("Location: /views/catalog.php");
+    exit;
+}
+
+// petit helper: récupérer une colonne possible si elle existe
+function pickField(array $row, array $keys, $default = '')
+{
+    foreach ($keys as $k) {
+        if (array_key_exists($k, $row) && $row[$k] !== null && $row[$k] !== '') {
+            return $row[$k];
+        }
+    }
+    return $default;
+}
+
+// ================== Auteur ==================
+$selectAuteur = $db->prepare("SELECT * FROM auteurs WHERE id_auteur = ? LIMIT 1");
+$selectAuteur->execute([$id]);
+$auteur = $selectAuteur->fetch(PDO::FETCH_ASSOC);
+
+if (!$auteur) {
+    header("Location: /views/catalog.php");
+    exit;
+}
+
+$auteurNom = trim(($auteur['auteur_prenom'] ?? '') . ' ' . ($auteur['auteur_nom'] ?? ''));
+if ($auteurNom === '') $auteurNom = "Auteur";
+
+$auteurNat = pickField($auteur, ['auteur_nationalite', 'nationalite'], '');
+$auteurNaissance = pickField($auteur, ['auteur_date_naissance', 'date_naissance', 'naissance'], '');
+$auteurDeces = pickField($auteur, ['auteur_date_deces', 'date_deces', 'deces'], '');
+$auteurBio = pickField($auteur, ['auteur_biographie', 'auteur_bio', 'bio', 'auteur_description', 'description'], '');
+
+// photo auteur : plusieurs noms possibles selon ta BDD
+$auteurPhoto = pickField($auteur, ['auteur_photo', 'auteur_image', 'photo', 'image'], '');
+$auteurPhotoSrc = !empty($auteurPhoto)
+    ? ("/assets/bo/img/" . $auteurPhoto)
+    : "../assets/fo/img/books/tolkien.jpeg"; // fallback (garde ton visuel)
+
+// ================== Bibliographie (livres de l’auteur) ==================
+$selectLivres = $db->prepare("
+    SELECT
+        l.id_livre,
+        l.livre_titre,
+        l.livre_couverture,
+        MIN(CONCAT(a2.auteur_prenom, ' ', a2.auteur_nom)) AS auteur_nom
+    FROM livres l
+    INNER JOIN livres_auteurs la ON la.id_livre = l.id_livre
+    INNER JOIN auteurs a ON a.id_auteur = la.id_auteur
+
+    -- Pour afficher un auteur “principal” (si multi-auteurs, on affiche le 1er trouvé)
+    LEFT JOIN livres_auteurs la2 ON la2.id_livre = l.id_livre
+    LEFT JOIN auteurs a2 ON a2.id_auteur = la2.id_auteur
+
+    WHERE a.id_auteur = ?
+    GROUP BY l.id_livre, l.livre_titre, l.livre_couverture
+    ORDER BY l.id_livre DESC
+");
+$selectLivres->execute([$id]);
+$livres = $selectLivres->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!-- ================== MAIN ================== -->
@@ -11,11 +74,12 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
 <section class="author-detail flex-row wrap">
 
     <div class="cover flex-col ai-center">
-        <img src="../assets/fo/img/books/tolkien.jpeg" alt="">
+        <img src="<?php echo htmlspecialchars($auteurPhotoSrc); ?>" alt="">
     </div>
 
     <div class="author flex-col">
-        <h2 class="">J.R.R. Tolkien</h2>
+        <h2 class=""><?php echo htmlspecialchars($auteurNom); ?></h2>
+
         <div class="content-details flex-row">
             <div class="cd-title flex-col">
                 <p>Nationalité</p>
@@ -23,74 +87,54 @@ include($_SERVER['DOCUMENT_ROOT'] . '/blocks/nav.php');
                 <p>Décédé le</p>
             </div>
             <div class="cd-content flex-col">
-                <p>Britannique</p>
-                <p>3 Janvier 1892</p>
-                <p>2 Septembre 1973</p>
+                <p><?php echo htmlspecialchars($auteurNat); ?></p>
+                <p><?php echo htmlspecialchars($auteurNaissance); ?></p>
+                <p><?php echo htmlspecialchars($auteurDeces); ?></p>
             </div>
         </div>
-        <p>Né en 1892 à Bloemfontein (Afrique du Sud), John Ronald Reuel Tolkien passe son enfance, après la mort de son père en 1896, au village de Sarehole près de Birmingham (Agleterre), ville dont sa famille est originaire.<br><br>
-            Diplômé d'Oxford en 1919 (après avoir servi dans les Lancashire), il travaille au célèbre Dictionnaire d'Oxford, obtient ensuite un poste de maître assistant à Leeds, puis une chaire de langues anciennes (anglo-saxon) à Oxford de 1925 à 1945 - et de langue et littérature anglaises de 1945 à sa retraite en 1959.<br><br>
-            Spécialiste de philologie faisant autorité dans le monde entier, J.R.R. Tolkien a écrit en 1936 Le Hobbit, considéré comme un classique de la littérature enfantine; en 1938-1939: un essai sur les contes de fées. Paru en 1949, Farmer Giles of Ham a séduit également adultes et enfants. J.R.R. Tolkien a travaillé quatorze ans au cycle intitulé Les Seigneur des Anneaux composé de: La Communauté de l'anneau (1954), Les Deux tours (1954), Le retour du roi (1955) -œuvre magistrale qui s'est imposée dans tous les pays.<br><br>
-            Dans Les Aventures de Tom Bombadil (1962), J.R.R. Tolkien déploie son talent pour les assonances ingénieuses. En 1968, il enregistre sur disque les Poèmes et Chansons de la Terre du Milieu, tiré des Aventures de Tom Bombadil et du Seigneur des Anneaux. Le conte de Smith of Wootton Major a paru en 1967.<br><br>
-            John Ronald Reuel Tolkien est mort en 1973.</p>
+
+        <p>
+            <?php
+            // bio peut contenir du HTML si tu le gères comme ça (sinon simple texte)
+            echo !empty($auteurBio) ? $auteurBio : "";
+            ?>
+        </p>
     </div>
 
     <div class="biblio flex-col">
         <h2 class="title underline-hug">BIBLIOGRAPHIE</h2>
-        <div class="books flex-row ai-center wrap">
-            <a href="book-detail.php" class="books-1">
-                <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
-                <p class="title">Le Silmarillion</p>
-                <p class="author">JRR Tolkien</p>
-            </a>
-            <a href="book-detail.php" class="books-2">
-                <img src="../assets/fo/img/books/it.png" alt="Livre 2">
-                <p class="title">It</p>
-                <p class="author">Stephen King</p>
-            </a>
-            <a href="book-detail.php" class="books-3">
-                <img src="../assets/fo/img/books/the-witcher.png" alt="Livre 3">
-                <p class="title">The Witcher</p>
-                <p class="author">Andrzej Sapkowski</p>
-            </a>
-            <a href="book-detail.php" class="books-4">
-                <img src="../assets/fo/img/books/la-route.png" alt="Livre 4">
-                <p class="title">La Route</p>
-                <p class="author">Cormac McCarthy</p>
-            </a>
-            <a href="book-detail.php" class="books-1">
-                <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
-                <p class="title">Le Silmarillion</p>
-                <p class="author">JRR Tolkien</p>
-            </a>
-            <a href="book-detail.php" class="books-1">
-                <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
-                <p class="title">Le Silmarillion</p>
-                <p class="author">JRR Tolkien</p>
-            </a>
-            <a href="book-detail.php" class="books-1">
-                <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
-                <p class="title">Le Silmarillion</p>
-                <p class="author">JRR Tolkien</p>
-            </a>
-            <a href="book-detail.php" class="books-1">
-                <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
-                <p class="title">Le Silmarillion</p>
-                <p class="author">JRR Tolkien</p>
-            </a>
-            <a href="book-detail.php" class="books-1">
-                <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
-                <p class="title">Le Silmarillion</p>
-                <p class="author">JRR Tolkien</p>
-            </a>
-        </div>
 
+        <div class="books flex-row ai-center wrap">
+            <?php
+            if (!empty($livres)) {
+                $i = 1;
+                foreach ($livres as $l) {
+                    $class = "books-" . (($i - 1) % 4 + 1);
+
+                    $coverFile = !empty($l['livre_couverture']) ? $l['livre_couverture'] : '1.jpeg';
+                    $coverSrc  = "/assets/bo/img/" . $coverFile;
+
+                    $titre = $l['livre_titre'] ?? 'Titre';
+                    $authorLabel = !empty($l['auteur_nom']) ? $l['auteur_nom'] : $auteurNom;
+            ?>
+                    <a href="book-detail.php?id=<?php echo (int)$l['id_livre']; ?>" class="<?php echo $class; ?>">
+                        <img src="<?php echo htmlspecialchars($coverSrc); ?>" alt="<?php echo htmlspecialchars($titre); ?>">
+                        <p class="title"><?php echo htmlspecialchars($titre); ?></p>
+                        <p class="author"><?php echo htmlspecialchars($authorLabel); ?></p>
+                    </a>
+            <?php
+                    $i++;
+                }
+            } else {
+                echo "<p style='opacity:.8;'>Aucun livre trouvé pour cet auteur.</p>";
+            }
+            ?>
+        </div>
     </div>
 
 </section>
 
 <!-- ================== FOOTER ================== -->
-
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/blocks/footer.php');
 ?>

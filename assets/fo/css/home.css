@@ -49,6 +49,57 @@ nav a {
 	background-color: var(--dm_transparency);
 	color: var(--cyan);
 }
+/* ================= USER NAV ================= */
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Avatar rond */
+.user-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #555;
+    flex-shrink: 0;
+}
+
+/* Fallback initiales */
+.user-initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Nom + déconnexion */
+.user-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.user-name {
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.logout-link {
+    font-size: 12px;
+    opacity: 0.7;
+    text-decoration: none;
+}
+
+.logout-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
 
 /* ============= HERO ============= */
 
@@ -78,17 +129,65 @@ nav a {
 	gap: 2rem;
 }
 
+/* Conteneur des livres */
 .catalog-preview .books {
 	gap: 2rem;
+	align-items: flex-end; /* IMPORTANT : aligne toutes les cartes sur la même base */
 }
 
+/* Carte livre */
+.catalog-preview .books a {
+	width: 260px;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	text-decoration: none;
+}
+
+/* Image du livre */
 .catalog-preview .books img {
+	width: 100%;
+	aspect-ratio: 2 / 3;
+	object-fit: cover;
+	display: block;
 	border-radius: 12px;
 }
 
+/* Titre du livre */
 .catalog-preview .books .title {
 	font-size: var(--font-book-title);
 	font-weight: bold;
+	margin-top: 0.75rem;
+	line-height: 1.25;
+
+	/* Clamp à 2 lignes */
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+
+	/* Réserve toujours la hauteur de 2 lignes */
+	min-height: calc(1.25em * 2);
+}
+
+/* Auteur */
+.catalog-preview .books .author {
+	margin-top: 0.35rem;
+	line-height: 1.2;
+	min-height: 1.2em; /* garde une ligne même si vide */
+}
+
+.catalog-arrow {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	display: flex;
+	align-items: center;
+}
+
+.catalog-arrow img {
+	display: block;
 }
 
 /* ============= SUBSCRIPTIONS ============= */

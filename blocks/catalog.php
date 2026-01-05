@@ -1,36 +1,64 @@
+<?php
+if (!isset($db)) {
+    include($_SERVER['DOCUMENT_ROOT'] . '/host.php');
+}
+
+$selectBooks = $db->prepare("
+    SELECT 
+        l.id_livre,
+        l.livre_titre,
+        l.livre_couverture,
+        MIN(CONCAT(a.auteur_prenom, ' ', a.auteur_nom)) AS auteur_nom
+    FROM livres l
+    LEFT JOIN livres_auteurs la ON la.id_livre = l.id_livre
+    LEFT JOIN auteurs a ON a.id_auteur = la.id_auteur
+    GROUP BY l.id_livre, l.livre_titre, l.livre_couverture
+    ORDER BY l.id_livre DESC
+    LIMIT 24
+");
+$selectBooks->execute();
+$books = $selectBooks->fetchAll(PDO::FETCH_ASSOC);
+
+while (count($books) < 4) {
+    $books[] = [
+        'id_livre' => 0,
+        'livre_titre' => 'Livre',
+        'livre_couverture' => '',
+        'auteur_nom' => 'Auteur inconnu'
+    ];
+}
+
+// On met les données dans un data-attribute (plus clean que script inline)
+$booksJson = htmlspecialchars(json_encode($books, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8');
+?>
+
 <section class="catalog-preview flex-col ta-center">
-    <a href="/views/catalog.php">
+    <a href="../views/catalog.php">
         <h2 class="underline-hug">CATALOGUE</h2>
     </a>
-    <div class="catalog-preview-row flex-row jc-center ai-center">
-        <a href="#">
-            <img src="../assets/fo/img/icons/arrow for left and up.png" alt="">
-        </a>
-        <div class="books flex-row jc-center ai-center wrap">
-            <a href="/views/book-detail.php" class="books-1">
-                <img src="../assets/fo/img/books/le-silmarillion.png" alt="Livre 1">
-                <p class="title">Le Silmarillion</p>
-                <p class="author">JRR Tolkien</p>
-            </a>
-            <a href="/views/book-detail.php" class="books-2">
-                <img src="../assets/fo/img/books/it.png" alt="Livre 2">
-                <p class="title">It</p>
-                <p class="author">Stephen King</p>
-            </a>
-            <a href="/views/book-detail.php" class="books-3">
-                <img src="../assets/fo/img/books/the-witcher.png" alt="Livre 3">
-                <p class="title">The Witcher</p>
-                <p class="author">Andrzej Sapkowski</p>
-            </a>
-            <a href="/views/book-detail.php" class="books-4">
-                <img src="../assets/fo/img/books/la-route.png" alt="Livre 4">
-                <p class="title">La Route</p>
-                <p class="author">Cormac McCarthy</p>
-            </a>
-        </div>
-        <a href="#">
-            <img src="../assets/fo/img/icons/arrow for right and down.png" alt="">
-        </a>
-    </div>
 
+    <div class="catalog-preview-row flex-row jc-center ai-center">
+
+        <button type="button" class="catalog-arrow" id="catPrev" aria-label="Précédent">
+            <img src="../assets/fo/img/icons/arrow for left and up.png" alt="">
+        </button>
+
+        <div class="books flex-row jc-center ai-center wrap" id="catBooks" data-books="<?php echo $booksJson; ?>">
+            <?php for ($i = 1; $i <= 4; $i++): ?>
+                <a href="#" class="books-<?php echo $i; ?>" data-slot="<?php echo $i - 1; ?>">
+                    <img src="../assets/fo/img/books/placeholder.png" alt="">
+                    <p class="title">Livre</p>
+                    <p class="author">Auteur inconnu</p>
+                </a>
+            <?php endfor; ?>
+        </div>
+
+        <button type="button" class="catalog-arrow" id="catNext" aria-label="Suivant">
+            <img src="../assets/fo/img/icons/arrow for right and down.png" alt="">
+        </button>
+
+    </div>
 </section>
+
+<!-- ✅ script FO -->
+<script src="/assets/fo/js/catalog-preview.js"></script>

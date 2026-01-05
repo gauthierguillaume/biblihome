@@ -58,24 +58,6 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
                 <ul>
 
                     <li>
-                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/index.php?zone=dashboard" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "dashboard"){ echo "active";}?>">
-                            <span class="las la-home"></span>
-                            <small>Dashboard</small>
-                        </a>
-                    </li>
-                    <li>
-                       <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/livraisons.php?zone=livraisons" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "livraisons"){ echo "active";}?>">
-                            <span class="las la-truck"></span>
-                            <small>Livraisons</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/utilisateurs.php?zone=utilisateurs" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "utilisateurs"){ echo "active";}?>">
-                            <span class="las la-user-friends"></span>
-                            <small>Utilisateurs</small>
-                        </a>
-                    </li>
-                    <li>
                        <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/livres.php?zone=livres" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "livres"){ echo "active";}?>">
                             <span class="las la-book"></span>
                             <small>Livres</small>
@@ -112,12 +94,6 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
                         <?php
                     }
                     ?>
-                    <li>
-                        <a href="<?php $_SERVER['DOCUMENT_ROOT']?>/bo/_views/divers.php?zone=divers" class="<?php if(isset($_GET["zone"]) && $_GET["zone"] == "divers"){ echo "active";}?>">
-                            <span class="las la-dove"></span>
-                            <small>Divers</small>
-                        </a>
-                    </li>
 
                 </ul>
             </div>

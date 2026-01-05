@@ -73,13 +73,17 @@
                     $avatar = $user['avatar'] ? htmlspecialchars($user['avatar']) : '';
                     $initials = bh_initials($first, $last);
                 ?>
-                    <div class="user-profile flex-row ai-center">
+                    <div class="user-profile">
                         <?php if ($avatar): ?>
                             <img src="<?php echo $avatar; ?>" alt="<?php echo $name; ?>" class="user-avatar">
                         <?php else: ?>
-                            <div class="user-initials"><?php echo $initials; ?></div>
+                            <div class="user-avatar user-initials"><?php echo $initials; ?></div>
                         <?php endif; ?>
-                        <span class="user-name"><?php echo $name; ?></span>
+
+                        <div class="user-meta">
+                            <span class="user-name"><?php echo $name; ?></span>
+                            <a href="/views/logout.php" class="logout-link">Déconnexion</a>
+                        </div>
                     </div>
                 <?php endif; ?>
 
