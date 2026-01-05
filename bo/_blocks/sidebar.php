@@ -16,7 +16,7 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-    <title>Modern Admin Dashboard</title>
+    <title>Biblihome Admin Dashboard</title>
     <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT']?>/assets/bo/css/style.css">
     <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT']?>/assets/bo/css/generic.css">
     <link rel="stylesheet" href="<?php $_SERVER['DOCUMENT_ROOT']?>/assets/bo/css/form.css">
@@ -44,7 +44,7 @@ $user = $selectUser->fetch(PDO::FETCH_OBJ);
    <input type="checkbox" id="menu-toggle">
     <div class="sidebar">
         <div class="side-header">
-            <h3>M<span>odern</span></h3>
+            <h3>B<span>iblihome</span></h3>
         </div>
         
         <div class="side-content">
