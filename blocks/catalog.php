@@ -16,7 +16,7 @@ $selectBooks = $db->prepare("
     ORDER BY l.id_livre DESC
     LIMIT 24
 ");
-$selectBooks->execute();
+$selectBooks->execute(); 
 $books = $selectBooks->fetchAll(PDO::FETCH_ASSOC);
 
 while (count($books) < 4) {
@@ -60,5 +60,4 @@ $booksJson = htmlspecialchars(json_encode($books, JSON_UNESCAPED_UNICODE), ENT_Q
     </div>
 </section>
 
-<!-- ✅ script FO -->
 <script src="/assets/fo/js/catalog-preview.js"></script>
