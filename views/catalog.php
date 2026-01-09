@@ -15,7 +15,6 @@ $genre  = trim($_GET['genre']  ?? '');
 $lang   = trim($_GET['lang']   ?? '');
 $year   = trim($_GET['year']   ?? '');
 
-// ✅ Tri (raccourcis)
 $sort = $_GET['sort'] ?? 'recent';
 
 $page = (int)($_GET['page'] ?? 1);
@@ -29,14 +28,9 @@ $genresList = $db->query("SELECT genre_tag FROM genres ORDER BY genre_tag ASC")-
 $langList   = $db->query("SELECT langue_nom FROM langues ORDER BY langue_nom ASC")->fetchAll(PDO::FETCH_COLUMN);
 
 $yearsList = $db->query("
-    SELECT DISTINCT YEAR(
-        STR_TO_DATE(
-            NULLIF(CAST(livre_date_publication AS CHAR), ''),
-            '%Y-%m-%d'
-        )
-    ) AS y
+    SELECT DISTINCT LEFT(CAST(livre_date_publication AS CHAR), 4) AS y
     FROM livres
-    WHERE NULLIF(CAST(livre_date_publication AS CHAR), '') IS NOT NULL
+    WHERE livre_date_publication IS NOT NULL
       AND CAST(livre_date_publication AS CHAR) <> '0000-00-00'
     ORDER BY y DESC
 ")->fetchAll(PDO::FETCH_COLUMN);
@@ -45,32 +39,27 @@ $yearsList = $db->query("
 $where  = [];
 $params = [];
 
-// titre
 if ($title !== '') {
     $where[]  = "l.livre_titre LIKE ?";
-    $params[] = "%" . $title . "%";
+    $params[] = "%$title%";
 }
 
-// auteur (prenom ou nom)
 if ($author !== '') {
     $where[]  = "(a.auteur_prenom LIKE ? OR a.auteur_nom LIKE ?)";
-    $params[] = "%" . $author . "%";
-    $params[] = "%" . $author . "%";
+    $params[] = "%$author%";
+    $params[] = "%$author%";
 }
 
-// genre (tag)
 if ($genre !== '') {
     $where[]  = "g.genre_tag = ?";
     $params[] = $genre;
 }
 
-// langue (nom)
 if ($lang !== '') {
     $where[]  = "la2.langue_nom = ?";
     $params[] = $lang;
 }
 
-// année
 if ($year !== '' && ctype_digit($year)) {
     $where[]  = "CAST(l.livre_date_publication AS CHAR) LIKE ?";
     $params[] = $year . "-%";
@@ -85,12 +74,12 @@ if (!empty($where)) {
 function buildCatalogUrl(array $overrides = []): string
 {
     $q = $_GET;
+
     foreach ($overrides as $k => $v) {
         if ($v === null) unset($q[$k]);
         else $q[$k] = $v;
     }
 
-    // évite page vide
     if (isset($q['page']) && ((int)$q['page'] <= 1)) unset($q['page']);
 
     $qs = http_build_query($q);
@@ -130,7 +119,6 @@ $totalBooks = (int)$stmtCount->fetchColumn();
 $totalPages = (int)ceil(max(1, $totalBooks) / $perPage);
 if ($page > $totalPages) $page = $totalPages;
 
-// ✅ recalcul offset si page ajustée
 $offset = ($page - 1) * $perPage;
 
 // ================== SELECT books page ==================
@@ -170,7 +158,6 @@ $nextUrl = ($page < $totalPages) ? buildCatalogUrl(['page' => $page + 1]) : "#";
     <div class="catalog-filters flex-col">
         <h2 class="underline-fill">FILTRES</h2>
 
-        <!-- ✅ Raccourcis de tri -->
         <div class="filter-shortcuts">
             <div class="shortcuts-wrap">
 
@@ -183,10 +170,8 @@ $nextUrl = ($page < $totalPages) ? buildCatalogUrl(['page' => $page + 1]) : "#";
             </div>
         </div>
 
-        <!-- ✅ On passe en GET pour filtrer -->
         <form id="filtersForm" class="filters flex-col" method="GET" action="catalog.php">
 
-            <!-- garde le tri actif quand tu recherches -->
             <input type="hidden" name="sort" value="<?php echo htmlspecialchars($sort); ?>">
 
             <label class="field">
@@ -226,7 +211,6 @@ $nextUrl = ($page < $totalPages) ? buildCatalogUrl(['page' => $page + 1]) : "#";
                 </datalist>
             </label>
 
-            <!-- ✅ page à 1 quand on filtre -->
             <input type="hidden" name="page" value="1">
         </form>
 
@@ -268,16 +252,12 @@ $nextUrl = ($page < $totalPages) ? buildCatalogUrl(['page' => $page + 1]) : "#";
 
                     $class = "books-" . (($i - 1) % 4 + 1);
 
-                    $coverFile = !empty($b['livre_couverture']) ? $b['livre_couverture'] : '1.jpeg';
-                    $coverSrc  = "/assets/bo/img/" . $coverFile;
-
-                    $bookTitle  = $b['livre_titre'] ?? 'Titre';
-                    $bookAuthor = !empty($b['auteur_nom']) ? $b['auteur_nom'] : 'Auteur inconnu';
+                    $coverSrc  = "/assets/bo/img/" . $b['livre_couverture'];
                 ?>
                     <a href="book-detail.php?id=<?php echo (int)$b['id_livre']; ?>" class="<?php echo $class; ?>">
-                        <img src="<?php echo htmlspecialchars($coverSrc); ?>" alt="<?php echo htmlspecialchars($bookTitle); ?>">
-                        <p class="title"><?php echo htmlspecialchars($bookTitle); ?></p>
-                        <p class="author"><?php echo htmlspecialchars($bookAuthor); ?></p>
+                        <img src="<?php echo htmlspecialchars($coverSrc); ?>" alt="<?php echo htmlspecialchars($b['livre_titre']); ?>">
+                        <p class="title"><?php echo htmlspecialchars($b['livre_titre']); ?></p>
+                        <p class="author"><?php echo htmlspecialchars($b['auteur_nom']); ?></p>
                     </a>
                 <?php
                     $i++;

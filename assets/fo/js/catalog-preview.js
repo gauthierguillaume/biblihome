@@ -1,77 +1,41 @@
 (function () {
-    const container = document.getElementById('catBooks');
-    const btnPrev = document.getElementById('catPrev');
-    const btnNext = document.getElementById('catNext');
+	var container = document.getElementById("catBooks");
+	var btnPrev = document.getElementById("catPrev");
+	var btnNext = document.getElementById("catNext");
+	if (!container || !btnPrev || !btnNext) return;
 
-    if (!container || !btnPrev || !btnNext) return;
+	var books = JSON.parse(container.getAttribute("data-books"));
+	var cards = container.querySelectorAll("a[data-slot]");
+	var start = 0;
 
-    // Les données viennent du PHP via data-books=""
-    const raw = container.getAttribute('data-books') || '[]';
+	function show() {
+		for (var i = 0; i < 4; i++) {
+			var index = start + i;
+			if (index >= books.length) index = index - books.length;
 
-    let books = [];
-    try {
-        books = JSON.parse(raw);
-    } catch (e) {
-        books = [];
-    }
+			var book = books[index];
+			var card = cards[i];
 
-    if (!Array.isArray(books) || books.length === 0) return;
+			card.href = "../views/book-detail.php?id=" + book.id_livre;
+			card.querySelector("img").src = "/assets/bo/img/" + book.livre_couverture;
+			card.querySelector(".title").textContent = book.livre_titre;
+			card.querySelector(".author").textContent = book.auteur_nom;
+		}
+	}
 
-    const cards = container.querySelectorAll('a[data-slot]');
-    const perPage = 4;
-    let start = 0;
+	btnNext.addEventListener("click", function () {
+		start++;
+		if (start >= books.length) start = 0;
+		show();
+	});
 
-    function coverSrc(filename) {
-        if (filename && filename.trim() !== '') {
-            return "/assets/bo/img/" + filename;
-        }
-        return "../assets/fo/img/books/placeholder.png";
-    }
+	btnPrev.addEventListener("click", function () {
+		start--;
+		if (start < 0) start = books.length - 1;
+		show();
+	});
 
-    function bookHref(id) {
-        if (!id || Number(id) <= 0) return "#";
-        return "../views/book-detail.php?id=" + Number(id);
-    }
-
-    function render() {
-        for (let i = 0; i < perPage; i++) {
-            const idx = (start + i) % books.length;
-            const b = books[idx] || {};
-
-            const a = cards[i];
-            const img = a.querySelector('img');
-            const t = a.querySelector('.title');
-            const au = a.querySelector('.author');
-
-            a.href = bookHref(b.id_livre);
-            img.src = coverSrc(b.livre_couverture);
-            img.alt = b.livre_titre ? b.livre_titre : 'Livre';
-
-            t.textContent = b.livre_titre ? b.livre_titre : 'Livre';
-            au.textContent = b.auteur_nom ? b.auteur_nom : 'Auteur inconnu';
-
-            if (!b.id_livre || Number(b.id_livre) <= 0) {
-                a.style.pointerEvents = "none";
-                a.style.opacity = "0.6";
-            } else {
-                a.style.pointerEvents = "";
-                a.style.opacity = "";
-            }
-        }
-    }
-
-    function prev() {
-        start -= perPage;
-        if (start < 0) start = Math.max(0, books.length - perPage);
-        render();
-    }
-
-    function next() {
-        start = (start + perPage) % books.length;
-        render();
-    }
-
-    render();
-    btnPrev.addEventListener('click', prev);
-    btnNext.addEventListener('click', next);
+	show();
 })();
+
+

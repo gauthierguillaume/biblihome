@@ -16,19 +16,9 @@ $selectBooks = $db->prepare("
     ORDER BY l.id_livre DESC
     LIMIT 24
 ");
-$selectBooks->execute(); 
+$selectBooks->execute();
 $books = $selectBooks->fetchAll(PDO::FETCH_ASSOC);
 
-while (count($books) < 4) {
-    $books[] = [
-        'id_livre' => 0,
-        'livre_titre' => 'Livre',
-        'livre_couverture' => '',
-        'auteur_nom' => 'Auteur inconnu'
-    ];
-}
-
-// On met les données dans un data-attribute (plus clean que script inline)
 $booksJson = htmlspecialchars(json_encode($books, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8');
 ?>
 
@@ -46,9 +36,9 @@ $booksJson = htmlspecialchars(json_encode($books, JSON_UNESCAPED_UNICODE), ENT_Q
         <div class="books flex-row jc-center ai-center wrap" id="catBooks" data-books="<?php echo $booksJson; ?>">
             <?php for ($i = 1; $i <= 4; $i++): ?>
                 <a href="#" class="books-<?php echo $i; ?>" data-slot="<?php echo $i - 1; ?>">
-                    <img src="../assets/fo/img/books/placeholder.png" alt="">
-                    <p class="title">Livre</p>
-                    <p class="author">Auteur inconnu</p>
+                    <img alt="">
+                    <p class="title"></p>
+                    <p class="author"></p>
                 </a>
             <?php endfor; ?>
         </div>
