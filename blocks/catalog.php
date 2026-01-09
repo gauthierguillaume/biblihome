@@ -28,7 +28,6 @@ while (count($books) < 4) {
     ];
 }
 
-// On met les données dans un data-attribute (plus clean que script inline)
 $booksJson = htmlspecialchars(json_encode($books, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8');
 ?>
 
