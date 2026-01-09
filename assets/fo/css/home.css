@@ -57,7 +57,6 @@ nav a {
     gap: 10px;
 }
 
-/* Avatar rond */
 .user-avatar {
     width: 90px;
     height: 90px;
@@ -67,7 +66,6 @@ nav a {
     flex-shrink: 0;
 }
 
-/* Fallback initiales */
 .user-initials {
     display: flex;
     align-items: center;
