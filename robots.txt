@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+sitemap: http://test.biblihome.fr/sitemap.xml
