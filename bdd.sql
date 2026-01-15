@@ -193,8 +193,8 @@ CREATE TABLE `langues` (
 
 INSERT INTO `langues` (`id_langue`, `langue_nom`) VALUES
 (1, 'Français'),
-(2, 'Grolandais'),
-(4, 'bingbingbong');
+(2, 'Anglais'),
+(3, 'Espagnol'),
 
 -- --------------------------------------------------------
 
@@ -222,7 +222,7 @@ INSERT INTO `livres` (`id_livre`, `livre_titre`, `livre_isbn`, `livre_couverture
 (1, 'defeferfrgesf', 'efrtgbrfdg', NULL, NULL, NULL, NULL, '2025-10-02 01:28:50', 2),
 (2, 'fu', 'helo', NULL, NULL, NULL, NULL, '2025-10-02 14:13:50', 2),
 (3, 'éasdfvgbn', 'zefrgeg', NULL, 'zaergtefz', 'FU', NULL, '2025-10-02 14:17:00', 2),
-(4, 'test of the test', '69420', NULL, 'never gonna give uyou up never gonna letè you down neverb gonna turn around and deseetr oiyou never gonna make you cry never goinna sa y goodbye never gonna tell a lie and hrut hyou fujdhfd jhfdjsd  gfdhakjzs ejklzhlikjfhqi zfehi zihf iau hefiu hi  jzef iojkazeh  odfji', 'hlpojfdj', '2025-10-02', '2025-10-03 10:59:55', 1);
+(4, 'test of the test', '69420', NULL, 'test', 'hlpojfdj', '2025-10-02', '2025-10-03 10:59:55', 1);
 
 -- --------------------------------------------------------
 

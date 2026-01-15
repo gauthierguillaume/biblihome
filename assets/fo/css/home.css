@@ -130,7 +130,7 @@ nav a {
 /* Conteneur des livres */
 .catalog-preview .books {
 	gap: 2rem;
-	align-items: flex-end; /* IMPORTANT : aligne toutes les cartes sur la même base */
+	align-items: flex-end;
 }
 
 /* Carte livre */
